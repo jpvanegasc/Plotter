@@ -8,6 +8,7 @@ class Editor:
 	"""
 	Define métodos para la manipulación de datos
 	"""
+
 	def convert_array_to_float(self, array:list):
 		"""
 		Convierte los elementos de una lista en float
@@ -20,7 +21,6 @@ class Editor:
 			array_in_float.append(float(element.replace(',','.')))
 
 		return array_in_float
-
 
 	def convert_array_to_log(self, array:list, base=10.0, base_e=False):
 		"""
@@ -60,7 +60,6 @@ class Editor:
 
 		return array_in_rad
 
-
 	def convert_array_to_degrees(self, array:list):
 		"""
 		Convierte una lista de números en una lista de los números en grados
@@ -84,37 +83,64 @@ class Plotter(Editor):
 	Define métodos para graficar archivos utilizando la librería pyplot
 	"""
 	def __init__(self, file_path):
-		self._file_path = file_path
-		self._file_name, self._clean_name = self.__get_filename()
-		self._path = self.__get_path()
-		self._data = self.__get_clean_data()
-		self.x , self.y = ['', ''], ['', '']
-		self.log_x, self.log_y = False, False
+		self.file_path = file_path
+		self.file_name, self.clean_name = self.__get_filename()
+		self.path = self.__get_path()
+		self.data = self.__get_clean_data()
+		self._x = {'variable':'', 'units':''}
+		self._y = {'variable':'', 'units':''}
+		self._log_x, self._log_y = False, False
 		self.take_dir = False
 
 	@property
-	def file_path(self):
-		return self._file_path
+	def x(self):
+		return self._x
 	
 	@property
-	def file_name(self):
-		return self._file_name
+	def y(self):
+		return self._y
 
 	@property
-	def clean_name(self):
-		return self._clean_name
+	def log_x(self):
+		return self._log_x
 	
 	@property
-	def path(self):
-		return self._path
+	def log_y(self):
+		return self._log_y
+	
+	@x.setter
+	def x(self, x_value):
+		try:
+			x_variable, x_unit = x_value
+		except ValueError:
+			raise ValueError(
+				"Please pass an iterable with two items: x_variable, x_unit")
+		else:
+			self._x = {'variable':x_variable, 'units':x_unit}
 
-	@property
-	def data(self):
-		return self._data
+	@y.setter
+	def y(self, y_value):
+		try:
+			y_variable, y_unit = y_value
+		except ValueError:
+			raise ValueError(
+				"Please pass an iterable with two items: y_variable, y_unit")
+		else:
+			self._y = {'variable':y_variable, 'units':y_unit}
 	
+	@log_x.setter
+	def log_x(self, log:bool):
+		if type(log) != bool:
+			raise ValueError('Please pass a boolean value for log_x')
+		
+		self._log_x = bool(log)
 	
-	#haz una funcion que elimine datos repetidos en un archivo generico x, y
-	#mejor, pasalo como argumento de clean data
+	@log_y.setter
+	def log_y(self, log:bool):
+		if type(log) != bool:
+			raise ValueError('Please pass a boolean value for log_y')
+
+		self._log_y = bool(log)
 
 	def __get_filename(self):
 		file = self.file_path.split('/')[-1]
@@ -127,24 +153,10 @@ class Plotter(Editor):
 		path = '/'.join(path) + '/'
 		return path
 
-	def set_x(self, x_variable, x_unit):
-		self.x = []
-		self.x.append(x_variable)
-		self.x.append(x_unit)
-		self.x = tuple(self.x)
-
-	def set_y(self, y_variable, y_unit):
-		self.y = []
-		self.y.append(y_variable)
-		self.y.append(y_unit)
-		self.y = tuple(self.y)
-
-	def set_log(self, log_x:bool, log_y:bool):
-		self.log_x = log_x
-		self.log_y = log_y
-
 	def __get_clean_data(self, no_repeat:bool = False):
 		"""
+		Comment coming soon in a theater near you
+		__param__ no_repeat:bool esto es lo que debería hacer para que limpie datos repetidos
 		"""
 		with open(self.file_path, 'r') as file:
 			data = file.read().strip()
@@ -214,7 +226,6 @@ class Plotter(Editor):
 
 			return titulo_grafica, label_x, label_y
 
-
 	def scatter(self, default_title:bool = True, regression:bool = False, no_title:bool = False):
 		"""
 		"""
@@ -227,15 +238,15 @@ class Plotter(Editor):
 		x_values, y_values = self.data
 			
 		# Log graphs
-		if self.log_x: x_values = convert_array_to_log(x_values)
-		if self.log_y: y_values = convert_array_to_log(y_values)
+		if self.log_x: x_values = self.convert_array_to_log(x_values)
+		if self.log_y: y_values = self.convert_array_to_log(y_values)
 
 		pl.scatter(x_values, y_values, color='darkblue', s=5)
 		
 		if regression:
-			a=np.polyfit(x_values, y_values, 1)
-			b=np.poly1d(a)
-			pl.plot(x_values,b(y_values),color='darkblue', label=str(b).replace())
+			a = np.polyfit(x_values, y_values, 1)
+			b = np.poly1d(a)
+			pl.plot(x_values,b(y_values),color='darkblue', label=str(b))
 		
 		# Title and labels
 		if not no_title: pl.title(title)
@@ -256,8 +267,8 @@ class Plotter(Editor):
 		x_values, y_values = self.data
 			
 		# Log graphs
-		if self.log_x: x_values = convert_array_to_log(x_values)
-		if self.log_y: y_values = convert_array_to_log(y_values)
+		if self.log_x: x_values = self.convert_array_to_log(x_values)
+		if self.log_y: y_values = self.convert_array_to_log(y_values)
 
 		pl.plot(x_values, y_values, color='darkblue', linewidth=1)
 		color_list = ['darkblue', 'darkgreen', 'darkred', ]
@@ -265,7 +276,7 @@ class Plotter(Editor):
 		if regression:
 			a=np.polyfit(x_values, y_values, 1)
 			b=np.poly1d(a)
-			pl.plot(x_values,b(y_values),color='darkblue', label=str(b).replace())
+			pl.plot(x_values,b(y_values),color='darkblue', label=str(b))
 		
 		# Title and labels
 		if not no_title: pl.title(title)
@@ -276,6 +287,18 @@ class Plotter(Editor):
 
 	def histogram(self):
 		pass
-
+"""
 p = Plotter('/home/juan/Documentos/UN/6_S/Moderna/4-07-2019-jpvanegasc/V0-0.txt')
-#p = Plotter('./test.txt')
+print(p.x)
+p.x = ('U', 'V')
+print(p.x)
+print(p.y)
+p.y = ('I', 'A')
+print(p.y)
+print(p.log_x)
+p.log_x = True
+print(p.log_x)
+print(p.log_y)
+p.log_y = True
+print(p.log_y)
+"""
