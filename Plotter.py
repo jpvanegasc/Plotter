@@ -35,7 +35,8 @@ class Editor:
 		for element in array:
 			
 			if type(element)!= float:
-				raise Exception("The elements in the array you are trying to convert aren't floats")
+				raise Exception(
+					"The elements in the array you are trying to convert aren't floats")
 			else:
 				if base_e:
 					array_in_log.append(m.log(element))
@@ -54,7 +55,8 @@ class Editor:
 		
 		for element in array:
 			if type(element) != float:
-				raise Exception('The elements in the array you are trying to convert must be floats')
+				raise Exception(
+					'The elements in the array you are trying to convert must be floats')
 			else:
 				array_in_rad.append(element*(m.pi/180))
 
@@ -70,13 +72,14 @@ class Editor:
 
 		for element in array:
 			if type(element) != float:
-				raise Exception('The elements in the array you are trying to convert must be floats')
+				raise Exception(
+					'The elements in the array you are trying to convert must be floats')
 			else:
 				array_in_deg.append(element*(180/m.pi))
 
 		return array_in_deg
 
-#--------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
 
 class Plotter(Editor):
 	"""
@@ -87,8 +90,8 @@ class Plotter(Editor):
 		self.file_name, self.clean_name = self.__get_filename()
 		self.path = self.__get_path()
 		self.data = self.__get_clean_data()
-		self._x = {'variable':'', 'units':''}
-		self._y = {'variable':'', 'units':''}
+		self._x = {'variable':'', 'unit':''}
+		self._y = {'variable':'', 'unit':''}
 		self._log_x, self._log_y = False, False
 		self.take_dir = False
 
@@ -116,7 +119,7 @@ class Plotter(Editor):
 			raise ValueError(
 				"Please pass an iterable with two items: x_variable, x_unit")
 		else:
-			self._x = {'variable':x_variable, 'units':x_unit}
+			self._x = {'variable':x_variable, 'unit':x_unit}
 
 	@y.setter
 	def y(self, y_value):
@@ -126,7 +129,7 @@ class Plotter(Editor):
 			raise ValueError(
 				"Please pass an iterable with two items: y_variable, y_unit")
 		else:
-			self._y = {'variable':y_variable, 'units':y_unit}
+			self._y = {'variable':y_variable, 'unit':y_unit}
 	
 	@log_x.setter
 	def log_x(self, log:bool):
@@ -193,36 +196,36 @@ class Plotter(Editor):
 		if not self.log_x and not self.log_y:
 			
 			titulo_grafica = r'${0}\left({1}\right)\;contra\;{2}\left({3}\right)$'.format(
-				self.y[0], self.y[1], self.x[0], self.x[1])
-			label_x = r'${0}\left({1}\right)$'.format(self.x[0], self.x[1])
-			label_y = r'${0}\left({1}\right)$'.format(self.y[0], self.y[1])
+				self.y['variable'], self.y['unit'], self.x['variable'], self.x['unit'])
+			label_x = r'${0}\left({1}\right)$'.format(self.x['variable'], self.x['unit'])
+			label_y = r'${0}\left({1}\right)$'.format(self.y['variable'], self.y['unit'])
 
 			return titulo_grafica, label_x, label_y
 
 		elif self.log_x and not self.log_y:
 			
 			titulo_grafica = r'${0}\left({1}\right)\;contra\;log\left({2}\right)$'.format(
-				self.y[0], self.y[1], self.x[0])
-			label_x = r'$log\left({0}\right)$'.format(self.x[0])
-			label_y = r'${0}\left({1}\right)$'.format(self.y[0], self.y[1])
+				self.y['variable'], self.y['unit'], self.x['variable'])
+			label_x = r'$log\left({0}\right)$'.format(self.x['variable'])
+			label_y = r'${0}\left({1}\right)$'.format(self.y['variable'], self.y['unit'])
 
 			return titulo_grafica, label_x, label_y
 
 		elif self.log_y and not self.log_x:
 			
 			titulo_grafica = r'$log\left({0}\right)\;contra\;{1}\left({2}\right)$'.format(
-				self.y[0], self.x[0], self.x[1])
-			label_x = r'${0}\left({1}\right)$'.format(self.x[0], self.x[1])
-			label_y = r'$log\left({0}\right)$'.format(self.y[0])
+				self.y['variable'], self.x['variable'], self.x['unit'])
+			label_x = r'${0}\left({1}\right)$'.format(self.x['variable'], self.x['unit'])
+			label_y = r'$log\left({0}\right)$'.format(self.y['variable'])
 
 			return titulo_grafica, label_x, label_y
 
 		elif self.log_x and self.log_y:
 			
 			titulo_grafica = r'$log\left({0}\right)\;contra\;log\left({1}\right)$'.format(
-				self.y[0], self.x[0])
-			label_x = r'$log\left({0}\right)$'.format(self.x[0])
-			label_y = r'$log\left({0}\right)$'.format(self.y[0])
+				self.y['variable'], self.x['variable'])
+			label_x = r'$log\left({0}\right)$'.format(self.x['variable'])
+			label_y = r'$log\left({0}\right)$'.format(self.y['variable'])
 
 			return titulo_grafica, label_x, label_y
 
@@ -287,18 +290,6 @@ class Plotter(Editor):
 
 	def histogram(self):
 		pass
-"""
+
 p = Plotter('/home/juan/Documentos/UN/6_S/Moderna/4-07-2019-jpvanegasc/V0-0.txt')
-print(p.x)
-p.x = ('U', 'V')
-print(p.x)
-print(p.y)
-p.y = ('I', 'A')
-print(p.y)
-print(p.log_x)
-p.log_x = True
-print(p.log_x)
-print(p.log_y)
-p.log_y = True
-print(p.log_y)
-"""
+print(p.get_title_labels())
