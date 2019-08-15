@@ -6,14 +6,13 @@ import numpy as np
 
 class Editor:
 	"""
-	Define métodos para la manipulación de datos
+	Defines methods for data manipulation
 	"""
-
 	def convert_array_to_float(self, array:list):
 		"""
-		Convierte los elementos de una lista en float
-		__param__ array:list lista a convertir
-		__autor__ : Juan Vanegas
+		Converts elements from a list to float
+		__param__ array:list list to convert
+		__author__ : Juan Vanegas
 		"""
 		array_in_float = []
 		
@@ -24,11 +23,11 @@ class Editor:
 
 	def convert_array_to_log(self, array:list, base=10.0, base_e=False):
 		"""
-		Convierte una lista de números en una lista del logaritmo de los números
-		__param__ array:list lista de números a cambiar
-		__param__ base:float base del logaritmo. Por default es 10.
-		__param__ base_e:bool define si la base a usar es e. Por default no se usa
-		__autor__ Juan Vanegas
+		Converts a list of numbers into a list of the logarithm of the numbers
+		__param__ array:list list to convert
+		__param__ base:float log base. By default 10
+		__param__ base_e:bool defines if log base is e. Overrides base. By default False
+		__author__ Juan Vanegas
 		"""
 		array_in_log = []
 		
@@ -47,9 +46,9 @@ class Editor:
 
 	def convert_array_to_radians(self, array:list):
 		"""
-		Convierte una lista de números en una lista de los números en radianes
-		__param__ array:list lista de números a convertir
-		__autor__ : Juan Vanegas
+		Converts a list of numbers into a list of the numbers in radians
+		__param__ array:list list to convert
+		__author__ : Juan Vanegas
 		"""
 		array_in_rad = []
 		
@@ -64,9 +63,9 @@ class Editor:
 
 	def convert_array_to_degrees(self, array:list):
 		"""
-		Convierte una lista de números en una lista de los números en grados
-		__param__ array:list lista de números a convertir
-		__autor__ : Juan Vanegas
+		Converts a list of numbers into a list of the numbers in degrees
+		__param__ array:list list to convert
+		__author__ : Juan Vanegas
 		"""
 		array_in_deg = []
 
@@ -83,13 +82,13 @@ class Editor:
 
 class Plotter(Editor):
 	"""
-	Define métodos para graficar archivos utilizando la librería pyplot
+	Defines methods for graphing files using the pyplot lib
 	"""
-	def __init__(self, file_path):
+	def __init__(self, file_path, no_repeat = False):
 		self.file_path = file_path
 		self.file_name, self.clean_name = self.__get_filename()
 		self.path = self.__get_path()
-		self.data = self.__get_clean_data()
+		self.data = self.__get_clean_data(no_repeat = no_repeat)
 		self._x = {'variable':'', 'unit':''}
 		self._y = {'variable':'', 'unit':''}
 		self._log_x, self._log_y = False, False
@@ -145,6 +144,7 @@ class Plotter(Editor):
 
 		self._log_y = bool(log)
 
+	# Paths
 	def __get_filename(self):
 		file = self.file_path.split('/')[-1]
 		clean = file.split('.')[0]
@@ -156,6 +156,7 @@ class Plotter(Editor):
 		path = '/'.join(path) + '/'
 		return path
 
+	# Data
 	def __get_clean_data(self, no_repeat:bool = False):
 		"""
 		Comment coming soon in a theater near you
@@ -186,10 +187,11 @@ class Plotter(Editor):
 
 		return (x,y)
 
+	# Titles
 	def get_title_labels(self):
 		""" 
-		Genera el título y los nombres de los ejes en formato LaTex
-		__autor__ : Juan Vanegas
+		Generates title and axes names in LaTex format
+		__author__ : Juan Vanegas
 		"""
 		titulo_grafica, label_x, label_y, = r'', r'', r''
 
@@ -229,6 +231,7 @@ class Plotter(Editor):
 
 			return titulo_grafica, label_x, label_y
 
+	# Graphing
 	def scatter(self, default_title:bool = True, regression:bool = False, no_title:bool = False):
 		"""
 		"""
@@ -265,7 +268,7 @@ class Plotter(Editor):
 			title, label_x, label_y = self.get_title_labels()
 		else:
 			def_tit, label_x, label_y = self.get_title_labels()
-			title = input('¿Qué título desea para la gráfica?\n')
+			title = input('Please write the title you wish for the graph:\n')
 
 		x_values, y_values = self.data
 			
@@ -291,5 +294,5 @@ class Plotter(Editor):
 	def histogram(self):
 		pass
 
-p = Plotter('/home/juan/Documentos/UN/6_S/Moderna/4-07-2019-jpvanegasc/V0-0.txt')
+p = Plotter('./test.txt')
 print(p.get_title_labels())
