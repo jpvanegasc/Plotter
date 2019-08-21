@@ -306,8 +306,32 @@ class Plotter(Editor):
 		pl.savefig(self.path + self.clean_name +'.png')
 		pl.close()
 
-	def histogram(self):
-		pass
+	def histogram(self, default_title:bool = True, no_title:bool = False):
+		"""
+		"""
+		if default_title:
+			title, label_x, label_y = self.get_title_labels()
+		else:
+			def_tit, label_x, label_y = self.get_title_labels()
+			title = input('Please write the title you wish for the graph:\n')
 
-p = Plotter('./test_hist.txt')
-print(p.lines())
+		if self.data[1] != 0:
+			raise Exception('The file you are trying to plot contains more than one column')
+
+		x_values, y_values = self.data
+			
+		# Log graphs
+		if self.log_x: x_values = self.convert_array_to_log(x_values)
+
+		pl.hist(x_values, color='darkblue', linewidth=1)
+		color_list = ['darkblue', 'darkgreen', 'darkred', ]
+
+		# Title and labels
+		if not no_title: pl.title(title)
+		pl.xlabel(label_x)
+		pl.ylabel(label_y)
+		pl.savefig(self.path + self.clean_name +'.png')
+		pl.close()
+
+#p = Plotter('./test_hist.txt')
+#p.histogram()
