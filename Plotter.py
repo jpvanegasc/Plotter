@@ -345,5 +345,39 @@ class Plotter(Editor):
 		pl.savefig(self.path + self.clean_name +'.png')
 		pl.close()
 
-#p = Plotter('./test_hist.txt')
-#p.histogram()
+	def frequency(self, scatter=True, default_title:bool = True, no_title:bool = False):
+		"""
+		if you got a better name for this method, please do change it
+		"""
+		if default_title:
+			title, label_x, label_y = self.get_title_labels()
+		else:
+			label_x, label_y = self.get_title_labels()[1], self.get_title_labels()[2] 
+			title = input('Please write the title you wish for the graph:\n')
+
+		if self.data[1] != 0:
+			raise Exception('The file you are trying to plot contains more than one column')
+
+		sorted_data = sorted(self.data[0])
+		x_values, freq = [], []
+
+		for dat in sorted_data:
+			if dat not in x_values:
+				x_values.append(float(dat))
+				freq.append(1.0)
+			else:
+				freq[-1] += 1.0
+
+		if self.log_x: x_values = self.convert_array_to_log(x_values)
+		if self.log_y: freq = self.convert_array_to_log(freq)
+
+		if scatter:
+			pl.scatter(x_values, freq, color='darkblue', s=5)
+		else:
+			pl.plot(x_values, freq, color='darkblue', linewidth=1)
+		
+		if not no_title: pl.title(title)
+		pl.xlabel(label_x)
+		pl.ylabel(label_y)
+		if not self.multiple_graphs: pl.savefig(self.path + self.clean_name +'.png')
+		if not self.multiple_graphs: pl.close()		
