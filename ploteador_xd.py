@@ -1,6 +1,6 @@
 from Plotter import Plotter
 
-p = Plotter('./test.txt')
+p = Plotter('./Example_Files/linear.txt')
 
 p.scatter()
 
