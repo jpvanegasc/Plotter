@@ -92,6 +92,7 @@ class Plotter(Editor):
 		self._x = {'variable':'', 'unit':''}
 		self._y = {'variable':'', 'unit':''}
 		self._log_x, self._log_y = False, False
+		self._multiple_graphs = False
 		self.take_dir = False
 
 	@property
@@ -109,6 +110,10 @@ class Plotter(Editor):
 	@property
 	def log_y(self):
 		return self._log_y
+
+	@property
+	def multiple_graphs(self):
+		return self._multiple_graphs
 	
 	@x.setter
 	def x(self, x_value):
@@ -143,6 +148,13 @@ class Plotter(Editor):
 			raise ValueError('Please pass a boolean value for log_y')
 
 		self._log_y = bool(log)
+
+	@multiple_graphs.setter
+	def multiple_graphs(self, multi:bool):
+		if type(multi) != bool:
+			raise ValueError('Please pass a boolean value for multiple_graphs')
+
+		self._multiple_graphs = bool(multi)
 
 	# Paths
 	def __get_filename(self):
@@ -270,8 +282,8 @@ class Plotter(Editor):
 		if not no_title: pl.title(title)
 		pl.xlabel(label_x)
 		pl.ylabel(label_y)
-		pl.savefig(self.path + self.clean_name +'.png')
-		pl.close()
+		if not self.multiple_graphs: pl.savefig(self.path + self.clean_name +'.png')
+		if not self.multiple_graphs: pl.close()
 
 	def lines(self, default_title:bool = True, regression:bool = False, no_title:bool = False):
 		"""
@@ -303,8 +315,8 @@ class Plotter(Editor):
 		if not no_title: pl.title(title)
 		pl.xlabel(label_x)
 		pl.ylabel(label_y)
-		pl.savefig(self.path + self.clean_name +'.png')
-		pl.close()
+		if not self.multiple_graphs: pl.savefig(self.path + self.clean_name +'.png')
+		if not self.multiple_graphs: pl.close()
 
 	def histogram(self, default_title:bool = True, no_title:bool = False):
 		"""
