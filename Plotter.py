@@ -171,7 +171,7 @@ class Plotter(Editor):
 		
 		for i in range(len(data)):
 			i_v = data[i].split('\t')
-			
+
 			if i==0:
 				try:
 					i_v = self.convert_array_to_float(i_v)
@@ -182,10 +182,19 @@ class Plotter(Editor):
 			else:
 				i_v = self.convert_array_to_float(i_v)
 			
-			x.append(i_v[0])
-			y.append(i_v[1])
+			if len(i_v) != 1:
+				x.append(i_v[0])
+				y.append(i_v[1])
+			
+			elif len(i_v) == 1:
+				x.append(i_v[0])
 
-		return (x,y)
+		if len(y) != 0:
+			return (x,y)
+			
+		elif len(y) == 0:
+			return (x, 0)
+		
 
 	# Titles
 	def get_title_labels(self):
@@ -240,6 +249,9 @@ class Plotter(Editor):
 		else:
 			def_tit, label_x, label_y = self.get_title_labels()
 			title = input('¿Qué título desea para la gráfica?\n')
+		
+		if self.data[1] == 0:
+			raise Exception('The file you are trying to plot contains only one column')
 
 		x_values, y_values = self.data
 			
@@ -270,6 +282,9 @@ class Plotter(Editor):
 			def_tit, label_x, label_y = self.get_title_labels()
 			title = input('Please write the title you wish for the graph:\n')
 
+		if self.data[1] == 0:
+			raise Exception('The file you are trying to plot contains only one column')
+
 		x_values, y_values = self.data
 			
 		# Log graphs
@@ -294,5 +309,5 @@ class Plotter(Editor):
 	def histogram(self):
 		pass
 
-p = Plotter('./test.txt')
-print(p.get_title_labels())
+p = Plotter('./test_hist.txt')
+print(p.lines())
