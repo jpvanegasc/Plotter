@@ -247,7 +247,7 @@ class Plotter(Editor):
 		if default_title:
 			title, label_x, label_y = self.get_title_labels()
 		else:
-			def_tit, label_x, label_y = self.get_title_labels()
+			label_x, label_y = self.get_title_labels()[1], self.get_title_labels()[2]
 			title = input('¿Qué título desea para la gráfica?\n')
 		
 		if self.data[1] == 0:
@@ -279,7 +279,7 @@ class Plotter(Editor):
 		if default_title:
 			title, label_x, label_y = self.get_title_labels()
 		else:
-			def_tit, label_x, label_y = self.get_title_labels()
+			label_x, label_y = self.get_title_labels()[1], self.get_title_labels()[2]
 			title = input('Please write the title you wish for the graph:\n')
 
 		if self.data[1] == 0:
@@ -312,13 +312,13 @@ class Plotter(Editor):
 		if default_title:
 			title, label_x, label_y = self.get_title_labels()
 		else:
-			def_tit, label_x, label_y = self.get_title_labels()
+			label_x, label_y = self.get_title_labels()[1], self.get_title_labels()[2] 
 			title = input('Please write the title you wish for the graph:\n')
 
 		if self.data[1] != 0:
 			raise Exception('The file you are trying to plot contains more than one column')
 
-		x_values, y_values = self.data
+		x_values = self.data[0]
 			
 		# Log graphs
 		if self.log_x: x_values = self.convert_array_to_log(x_values)
