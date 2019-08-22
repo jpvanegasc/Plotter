@@ -97,11 +97,11 @@ class DataProcessing(Editor):
 	"""
 	Defines methods for extracting and proccesing data from files
 	"""
-	def __init__(self, file_path, no_repeat = False):
+	def __init__(self, file_path, column_num = 2, no_repeat = False):
 		self.file_path = file_path
 		self.file_name, self.clean_name = self.__get_filename()
 		self.path = self.__get_path()
-		self.data = self.__get_clean_data(no_repeat = no_repeat)
+		self.data = self.__get_clean_data(column_num = column_num, no_repeat = no_repeat)
 
 	# Paths
 	def __get_filename(self):
@@ -116,43 +116,49 @@ class DataProcessing(Editor):
 		return path
 
 	# Data
-	def __get_clean_data(self, no_repeat:bool = False):
+	def __get_clean_data(self, column_num = 2, no_repeat:bool = False):
 		"""
-		Comment coming soon in a theater near you
-		__param__ no_repeat:bool esto es lo que debería hacer para que limpie datos repetidos
+		Reads the file containing the data to be plotted, process it, and stores it in
+			lists
+		__param__ column_num:int number of columns in the file. By default 2, which
+			manages both regular (x, y) files and single column files. 
+			Max value 10 (for now)
+		__param__ no_repeat:bool work in progress, useless for now
+		__return__ :(x, y, y1, ... , y_n)
 		"""
+		if type(column_num) != int:
+			raise ValueError('column_num must be an int')
+		if column_num > 11:
+			raise ValueError('Value not supported for column_num')
+
 		with open(self.file_path, 'r') as file:
 			data = file.read().strip()
 		data = data.split('\n')
 		
 		x, x1, x2, x3, x4, x5, x6, x7, x8, x9 = [], [], [], [], [], [], [], [], [], []
-		y, y1, y2, y3, y4, y5, y6, y7, y8, y9 = [], [], [], [], [], [], [], [], [], []
+		y = [[], [], [], [], [], [], [], [], [], []]
 		
 		for i in range(len(data)):
-			i_v = data[i].split('\t')
+			line = data[i].split('\t')
 
 			if i==0:
 				try:
-					i_v = self.convert_array_to_float(i_v)
+					line = self.convert_array_to_float(line)
 				except:
 					print(f'Careful! First line omitted on {self.file_name}')
 					continue
 
 			else:
-				i_v = self.convert_array_to_float(i_v)
+				line = self.convert_array_to_float(line)
 			
-			if len(i_v) != 1:
-				x.append(i_v[0])
-				y.append(i_v[1])
+			for i, value in enumerate(line):
+				if i == 0:
+					x.append(value)
+				else:
+					y[i-1].append(value)
 			
-			elif len(i_v) == 1:
-				x.append(i_v[0])
+		return (x, y)
 
-		if len(y) != 0:
-			return (x,y)
-			
-		elif len(y) == 0:
-			return (x, 0)
 
 # ----------------------------------------------------------------------------------------
 
@@ -228,6 +234,29 @@ class Plotter(DataProcessing):
 			raise ValueError('Please pass a boolean value for multiple_graphs')
 
 		self._multiple_graphs = bool(multi)
+	# Preprocess data
+	def __preprocess_data(self, default_title):
+		"""
+		"""
+		if default_title:
+			title, label_x, label_y = self.get_title_labels()
+		else:
+			label_x, label_y = self.get_title_labels()[1], self.get_title_labels()[2]
+			title = input('¿Qué título desea para la gráfica?\n')
+		
+		if self.data[1] == 0:
+			raise Exception('The file you are trying to plot contains only one column')
+
+		x_values, y_values = self.data
+			
+		# Log graphs
+		if self.log_x: x_values = self.convert_array_to_log(x_values)
+		if self.log_y: 
+			for y in y_values:
+				y = self.convert_array_to_log(y)
+		
+		return title, label_x, label_y, x_values, y_values
+
 
 	# Titles
 	def get_title_labels(self):
@@ -278,22 +307,12 @@ class Plotter(DataProcessing):
 	def scatter(self, default_title:bool = True, regression:bool = False, no_title:bool = False):
 		"""
 		"""
-		if default_title:
-			title, label_x, label_y = self.get_title_labels()
-		else:
-			label_x, label_y = self.get_title_labels()[1], self.get_title_labels()[2]
-			title = input('¿Qué título desea para la gráfica?\n')
+		title, label_x, label_y, x_values, y_values = self.__preprocess_data(default_title)
 		
-		if self.data[1] == 0:
-			raise Exception('The file you are trying to plot contains only one column')
-
-		x_values, y_values = self.data
-			
-		# Log graphs
-		if self.log_x: x_values = self.convert_array_to_log(x_values)
-		if self.log_y: y_values = self.convert_array_to_log(y_values)
-
-		pl.scatter(x_values, y_values, color='darkblue', s=5)
+		for y in y_values:
+			if len(y) == 0:
+				break
+			pl.scatter(x_values, y, color='darkblue', s=5)
 		
 		if regression:
 			a = np.polyfit(x_values, y_values, 1)
@@ -310,23 +329,12 @@ class Plotter(DataProcessing):
 	def lines(self, default_title:bool = True, regression:bool = False, no_title:bool = False):
 		"""
 		"""
-		if default_title:
-			title, label_x, label_y = self.get_title_labels()
-		else:
-			label_x, label_y = self.get_title_labels()[1], self.get_title_labels()[2]
-			title = input('Please write the title you wish for the graph:\n')
-
-		if self.data[1] == 0:
-			raise Exception('The file you are trying to plot contains only one column')
-
-		x_values, y_values = self.data
-			
-		# Log graphs
-		if self.log_x: x_values = self.convert_array_to_log(x_values)
-		if self.log_y: y_values = self.convert_array_to_log(y_values)
-
-		pl.plot(x_values, y_values, color='darkblue', linewidth=1)
-		color_list = ['darkblue', 'darkgreen', 'darkred', ]
+		title, label_x, label_y, x_values, y_values = self.__preprocess_data(default_title)
+		
+		for y in y_values:
+			if len(y) == 0:
+				break
+			pl.plot(x_values, y, color='darkblue', linewidth=1)
 		
 		if regression:
 			a=np.polyfit(x_values, y_values, 1)
