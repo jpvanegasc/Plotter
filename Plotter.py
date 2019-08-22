@@ -93,15 +93,75 @@ class Editor:
 
 #-----------------------------------------------------------------------------------------
 
-class Plotter(Editor):
+class DataProcessing(Editor):
 	"""
-	Defines methods for graphing files using the pyplot lib
+	Defines methods for extracting and proccesing data from files
 	"""
 	def __init__(self, file_path, no_repeat = False):
 		self.file_path = file_path
 		self.file_name, self.clean_name = self.__get_filename()
 		self.path = self.__get_path()
 		self.data = self.__get_clean_data(no_repeat = no_repeat)
+
+	# Paths
+	def __get_filename(self):
+		file = self.file_path.split('/')[-1]
+		clean = file.split('.')[0]
+		return (file, clean)
+
+	def __get_path(self):
+		path = self.file_path.split('/')
+		del(path[-1])
+		path = '/'.join(path) + '/'
+		return path
+
+	# Data
+	def __get_clean_data(self, no_repeat:bool = False):
+		"""
+		Comment coming soon in a theater near you
+		__param__ no_repeat:bool esto es lo que debería hacer para que limpie datos repetidos
+		"""
+		with open(self.file_path, 'r') as file:
+			data = file.read().strip()
+		data = data.split('\n')
+		
+		x, x1, x2, x3, x4, x5, x6, x7, x8, x9 = [], [], [], [], [], [], [], [], [], []
+		y, y1, y2, y3, y4, y5, y6, y7, y8, y9 = [], [], [], [], [], [], [], [], [], []
+		
+		for i in range(len(data)):
+			i_v = data[i].split('\t')
+
+			if i==0:
+				try:
+					i_v = self.convert_array_to_float(i_v)
+				except:
+					print(f'Careful! First line omitted on {self.file_name}')
+					continue
+
+			else:
+				i_v = self.convert_array_to_float(i_v)
+			
+			if len(i_v) != 1:
+				x.append(i_v[0])
+				y.append(i_v[1])
+			
+			elif len(i_v) == 1:
+				x.append(i_v[0])
+
+		if len(y) != 0:
+			return (x,y)
+			
+		elif len(y) == 0:
+			return (x, 0)
+
+# ----------------------------------------------------------------------------------------
+
+class Plotter(DataProcessing):
+	"""
+	Defines methods for graphing files using the pyplot lib
+	"""
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
 		self._x = {'variable':'', 'unit':''}
 		self._y = {'variable':'', 'unit':''}
 		self._log_x, self._log_y = False, False
@@ -168,58 +228,6 @@ class Plotter(Editor):
 			raise ValueError('Please pass a boolean value for multiple_graphs')
 
 		self._multiple_graphs = bool(multi)
-
-	# Paths
-	def __get_filename(self):
-		file = self.file_path.split('/')[-1]
-		clean = file.split('.')[0]
-		return (file, clean)
-
-	def __get_path(self):
-		path = self.file_path.split('/')
-		del(path[-1])
-		path = '/'.join(path) + '/'
-		return path
-
-	# Data
-	def __get_clean_data(self, no_repeat:bool = False):
-		"""
-		Comment coming soon in a theater near you
-		__param__ no_repeat:bool esto es lo que debería hacer para que limpie datos repetidos
-		"""
-		with open(self.file_path, 'r') as file:
-			data = file.read().strip()
-		data = data.split('\n')
-		
-		x, x1, x2, x3, x4, x5, x6, x7, x8, x9 = [], [], [], [], [], [], [], [], [], []
-		y, y1, y2, y3, y4, y5, y6, y7, y8, y9 = [], [], [], [], [], [], [], [], [], []
-		
-		for i in range(len(data)):
-			i_v = data[i].split('\t')
-
-			if i==0:
-				try:
-					i_v = self.convert_array_to_float(i_v)
-				except:
-					print(f'Careful! First line omitted on {self.file_name}')
-					continue
-
-			else:
-				i_v = self.convert_array_to_float(i_v)
-			
-			if len(i_v) != 1:
-				x.append(i_v[0])
-				y.append(i_v[1])
-			
-			elif len(i_v) == 1:
-				x.append(i_v[0])
-
-		if len(y) != 0:
-			return (x,y)
-			
-		elif len(y) == 0:
-			return (x, 0)
-		
 
 	# Titles
 	def get_title_labels(self):
