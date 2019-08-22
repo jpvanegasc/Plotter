@@ -234,18 +234,16 @@ class Plotter(DataProcessing):
 			raise ValueError('Please pass a boolean value for multiple_graphs')
 
 		self._multiple_graphs = bool(multi)
+	
 	# Preprocess data
 	def __preprocess_data(self, default_title):
-		"""
+		"""		
 		"""
 		if default_title:
 			title, label_x, label_y = self.get_title_labels()
 		else:
 			label_x, label_y = self.get_title_labels()[1], self.get_title_labels()[2]
 			title = input('¿Qué título desea para la gráfica?\n')
-		
-		if self.data[1] == 0:
-			raise Exception('The file you are trying to plot contains only one column')
 
 		x_values, y_values = self.data
 			
