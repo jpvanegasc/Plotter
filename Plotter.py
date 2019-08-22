@@ -225,45 +225,46 @@ class Plotter(Editor):
 	def get_title_labels(self):
 		""" 
 		Generates title and axes names in LaTex format
+		__return__ : title, label_x, label_y
 		__author__ : Juan Vanegas
 		"""
-		titulo_grafica, label_x, label_y, = r'', r'', r''
+		title, label_x, label_y, = r'', r'', r''
 
 		if not self.log_x and not self.log_y:
 			
-			titulo_grafica = r'${0}\left({1}\right)\;contra\;{2}\left({3}\right)$'.format(
+			title = r'${0}\left({1}\right)\;contra\;{2}\left({3}\right)$'.format(
 				self.y['variable'], self.y['unit'], self.x['variable'], self.x['unit'])
 			label_x = r'${0}\left({1}\right)$'.format(self.x['variable'], self.x['unit'])
 			label_y = r'${0}\left({1}\right)$'.format(self.y['variable'], self.y['unit'])
 
-			return titulo_grafica, label_x, label_y
+			return title, label_x, label_y
 
 		elif self.log_x and not self.log_y:
 			
-			titulo_grafica = r'${0}\left({1}\right)\;contra\;log\left({2}\right)$'.format(
+			title = r'${0}\left({1}\right)\;contra\;log\left({2}\right)$'.format(
 				self.y['variable'], self.y['unit'], self.x['variable'])
 			label_x = r'$log\left({0}\right)$'.format(self.x['variable'])
 			label_y = r'${0}\left({1}\right)$'.format(self.y['variable'], self.y['unit'])
 
-			return titulo_grafica, label_x, label_y
+			return title, label_x, label_y
 
 		elif self.log_y and not self.log_x:
 			
-			titulo_grafica = r'$log\left({0}\right)\;contra\;{1}\left({2}\right)$'.format(
+			title = r'$log\left({0}\right)\;contra\;{1}\left({2}\right)$'.format(
 				self.y['variable'], self.x['variable'], self.x['unit'])
 			label_x = r'${0}\left({1}\right)$'.format(self.x['variable'], self.x['unit'])
 			label_y = r'$log\left({0}\right)$'.format(self.y['variable'])
 
-			return titulo_grafica, label_x, label_y
+			return title, label_x, label_y
 
 		elif self.log_x and self.log_y:
 			
-			titulo_grafica = r'$log\left({0}\right)\;contra\;log\left({1}\right)$'.format(
+			title = r'$log\left({0}\right)\;contra\;log\left({1}\right)$'.format(
 				self.y['variable'], self.x['variable'])
 			label_x = r'$log\left({0}\right)$'.format(self.x['variable'])
 			label_y = r'$log\left({0}\right)$'.format(self.y['variable'])
 
-			return titulo_grafica, label_x, label_y
+			return title, label_x, label_y
 
 	# Graphing
 	def scatter(self, default_title:bool = True, regression:bool = False, no_title:bool = False):
