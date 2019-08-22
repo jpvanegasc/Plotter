@@ -20,6 +20,19 @@ class Editor:
 			array_in_float.append(float(element.replace(',','.')))
 
 		return array_in_float
+	
+	def convert_array_to_int(self, array:list):
+		"""
+		Convierte los elementos de una lista en int
+		__param__ array:list lista a convertir
+		__autor__ : Juan Vanegas
+		"""
+		array_in_int = []
+		
+		for element in array:
+			array_in_int.append(int(element))
+
+		return array_in_int
 
 	def convert_array_to_log(self, array:list, base=10.0, base_e=False):
 		"""
