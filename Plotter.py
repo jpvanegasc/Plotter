@@ -346,6 +346,7 @@ class Plotter(DataProcessor):
 		if not no_title: pl.title(title)
 		pl.xlabel(label_x)
 		pl.ylabel(label_y)
+		pl.legend()
 		if not self.multiple_graphs: pl.savefig(self.path + self.clean_name +'.png')
 		if not self.multiple_graphs: pl.close()
 
@@ -382,6 +383,7 @@ class Plotter(DataProcessor):
 		if not no_title: pl.title(title)
 		pl.xlabel(label_x)
 		pl.ylabel(label_y)
+		pl.legend()
 		if not self.multiple_graphs: pl.savefig(self.path + self.clean_name +'.png')
 		if not self.multiple_graphs: pl.close()
 
@@ -415,6 +417,7 @@ class Plotter(DataProcessor):
 		if not no_title: pl.title(title)
 		pl.xlabel(label_x)
 		pl.ylabel(label_y)
+		pl.legend()
 		pl.savefig(self.path + self.clean_name +'.png')
 		pl.close()
 
@@ -462,5 +465,6 @@ class Plotter(DataProcessor):
 		if not no_title: pl.title(title)
 		pl.xlabel(label_x)
 		pl.ylabel(label_y)
+		pl.legend()
 		if not self.multiple_graphs: pl.savefig(self.path + self.clean_name +'.png')
 		if not self.multiple_graphs: pl.close()		
