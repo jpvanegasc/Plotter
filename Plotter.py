@@ -313,7 +313,7 @@ class Plotter(DataProcessing):
 			return title, label_x, label_y
 
 	# Graphing
-	def scatter(self, default_title:bool = True, reg:int = 0, no_title:bool = False):
+	def scatter(self, default_title = True, reg:int = 0, no_title = False, **kwargs):
 		"""
 		Generates a scatter graph and saves it
 		__param__ default_title:bool determines if the auto generated titles is to be used
@@ -336,7 +336,7 @@ class Plotter(DataProcessing):
 		for y in y_values:
 			if len(y) == 0:
 				break
-			pl.scatter(x_values, y, s=5)
+			pl.scatter(x_values, y, s=5, **kwargs)
 		
 		# Plots regression
 		if bool(reg):
@@ -349,7 +349,7 @@ class Plotter(DataProcessing):
 		if not self.multiple_graphs: pl.savefig(self.path + self.clean_name +'.png')
 		if not self.multiple_graphs: pl.close()
 
-	def lines(self, default_title:bool = True, reg:int = 0, no_title:bool = False):
+	def lines(self, default_title = True, reg:int = 0, no_title = False,  **kwargs):
 		"""
 		Generates a graph with lines and saves it
 		__param__ default_title:bool determines if the auto generated titles is to be used
@@ -372,7 +372,7 @@ class Plotter(DataProcessing):
 		for y in y_values:
 			if len(y) == 0:
 				break
-			pl.plot(x_values, y, linewidth=1)
+			pl.plot(x_values, y, linewidth=1, **kwargs)
 		
 		# Plots regression
 		if bool(reg):
@@ -385,7 +385,7 @@ class Plotter(DataProcessing):
 		if not self.multiple_graphs: pl.savefig(self.path + self.clean_name +'.png')
 		if not self.multiple_graphs: pl.close()
 
-	def histogram(self, default_title:bool = True, no_title:bool = False):
+	def histogram(self, default_title = True, no_title = False, **kwargs):
 		"""
 		Generates an histogram graph and saves it
 		__param__ default_title:bool determines if the auto generated titles is to be used
@@ -409,7 +409,7 @@ class Plotter(DataProcessing):
 		if self.log_x: x_values = self.convert_array_to_log(x_values)
 		
 		# Plots data
-		pl.hist(x_values, color='darkblue', linewidth=1)
+		pl.hist(x_values, linewidth=1, **kwargs)
 
 		# Title and labels
 		if not no_title: pl.title(title)
@@ -418,7 +418,7 @@ class Plotter(DataProcessing):
 		pl.savefig(self.path + self.clean_name +'.png')
 		pl.close()
 
-	def frequency(self, scatter=True, default_title:bool = True, no_title:bool = False):
+	def frequency(self, scatter=True, default_title = True, no_title = False, **kwargs):
 		"""
 		if you got a better name for this method, please do change it
 		Generates a frequency graph and saves it
@@ -454,9 +454,9 @@ class Plotter(DataProcessing):
 		
 		# Plots data
 		if scatter:
-			pl.scatter(x_values, freq, color='darkblue', s=5)
+			pl.scatter(x_values, freq, color='darkblue', s=5, **kwargs)
 		else:
-			pl.plot(x_values, freq, color='darkblue', linewidth=1)
+			pl.plot(x_values, freq, color='darkblue', linewidth=1, **kwargs)
 		
 		# Title and labels
 		if not no_title: pl.title(title)
