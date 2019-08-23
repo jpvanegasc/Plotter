@@ -255,6 +255,23 @@ class Plotter(DataProcessing):
 		
 		return title, label_x, label_y, x_values, y_values
 
+	# Regression
+	def __regression(self, x_values, y_values, degree):
+		"""
+		Plots a polynomial fit for each pair (x, y_n) on y values
+		__param__ x_values:list fixed x values for each individual y value group
+		__param__ y_values:list group oof all the y values found on the file
+		__param__ degree:int degree of the polynomial to be fitted
+		__author__ : Juan Vanegas
+		"""
+		for y in y_values:
+			if len(y) == 0:
+				break
+			
+			coef = np.polyfit(x_values, y, degree)
+			f_fit = np.poly1d(coef)
+			pl.plot(x_values, f_fit(x_values), color='red', label=str(f_fit))
+		
 
 	# Titles
 	def get_title_labels(self):
@@ -302,7 +319,7 @@ class Plotter(DataProcessing):
 			return title, label_x, label_y
 
 	# Graphing
-	def scatter(self, default_title:bool = True, regression:bool = False, no_title:bool = False):
+	def scatter(self, default_title:bool = True, reg:int = 0, no_title:bool = False):
 		"""
 		"""
 		title, label_x, label_y, x_values, y_values = self.__preprocess_data(default_title)
@@ -312,10 +329,8 @@ class Plotter(DataProcessing):
 				break
 			pl.scatter(x_values, y, color='darkblue', s=5)
 		
-		if regression:
-			a = np.polyfit(x_values, y_values, 1)
-			b = np.poly1d(a)
-			pl.plot(x_values,b(y_values),color='darkblue', label=str(b))
+		if bool(reg):
+			self.__regression(x_values, y_values, reg)
 		
 		# Title and labels
 		if not no_title: pl.title(title)
@@ -324,7 +339,7 @@ class Plotter(DataProcessing):
 		if not self.multiple_graphs: pl.savefig(self.path + self.clean_name +'.png')
 		if not self.multiple_graphs: pl.close()
 
-	def lines(self, default_title:bool = True, regression:bool = False, no_title:bool = False):
+	def lines(self, default_title:bool = True, reg:int = 0, no_title:bool = False):
 		"""
 		"""
 		title, label_x, label_y, x_values, y_values = self.__preprocess_data(default_title)
@@ -334,10 +349,8 @@ class Plotter(DataProcessing):
 				break
 			pl.plot(x_values, y, color='darkblue', linewidth=1)
 		
-		if regression:
-			a=np.polyfit(x_values, y_values, 1)
-			b=np.poly1d(a)
-			pl.plot(x_values,b(y_values),color='darkblue', label=str(b))
+		if bool(reg):
+			self.__regression(x_values, y_values, reg)
 		
 		# Title and labels
 		if not no_title: pl.title(title)
