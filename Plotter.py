@@ -265,9 +265,8 @@ class Plotter(DataProcessing):
 			
 			coef = np.polyfit(x_values, y, degree)
 			f_fit = np.poly1d(coef)
-			pl.plot(x_values, f_fit(x_values), color='red', label=str(f_fit))
-		
-
+			pl.plot(x_values, f_fit(x_values), label=str(f_fit))
+	
 	# Titles
 	def get_title_labels(self):
 		""" 
@@ -326,10 +325,16 @@ class Plotter(DataProcessing):
 		"""
 		title, label_x, label_y, x_values, y_values = self.__preprocess_data(default_title)
 		
+		# Set color cycle
+		colors = ['#000000', '#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
+			'#911eb4', '#42d4f4', '#f032e6', '#bfef45', '#fabebe', '#469990', '#e6beff',
+			'#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#000075']
+		pl.gca().set_prop_cycle('color', colors)
+
 		for y in y_values:
 			if len(y) == 0:
 				break
-			pl.scatter(x_values, y, color='darkblue', s=5)
+			pl.scatter(x_values, y, s=5)
 		
 		if bool(reg):
 			self.__regression(x_values, y_values, reg)
@@ -353,10 +358,16 @@ class Plotter(DataProcessing):
 		"""
 		title, label_x, label_y, x_values, y_values = self.__preprocess_data(default_title)
 		
+		# Set color cycle
+		colors = ['#000000', '#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
+			'#911eb4', '#42d4f4', '#f032e6', '#bfef45', '#fabebe', '#469990', '#e6beff',
+			'#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#000075']
+		pl.gca().set_prop_cycle(color = colors)
+
 		for y in y_values:
 			if len(y) == 0:
 				break
-			pl.plot(x_values, y, color='darkblue', linewidth=1)
+			pl.plot(x_values, y, linewidth=1)
 		
 		if bool(reg):
 			self.__regression(x_values, y_values, reg)
