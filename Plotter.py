@@ -400,7 +400,7 @@ class Plotter(DataProcessing):
 			label_x, label_y = self.get_title_labels()[1], self.get_title_labels()[2] 
 			title = input('Please write the title you wish for the graph:\n')
 
-		if self.data[1] != 0:
+		if len(self.data[1]) != 0:
 			raise Exception('The file you are trying to plot contains more than one column')
 
 		x_values = self.data[0]
@@ -434,7 +434,7 @@ class Plotter(DataProcessing):
 			label_x, label_y = self.get_title_labels()[1], self.get_title_labels()[2] 
 			title = input('Please write the title you wish for the graph:\n')
 
-		if self.data[1] != 0:
+		if len(self.data[1]) != 0:
 			raise Exception('The file you are trying to plot contains more than one column')
 
 		# Generates the y values
