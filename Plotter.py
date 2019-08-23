@@ -323,6 +323,7 @@ class Plotter(DataProcessing):
 			a title
 		__author__ : Juan Vanegas
 		"""
+		# Readies title, labels and data
 		title, label_x, label_y, x_values, y_values = self.__preprocess_data(default_title)
 		
 		# Set color cycle
@@ -331,11 +332,13 @@ class Plotter(DataProcessing):
 			'#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#000075']
 		pl.gca().set_prop_cycle('color', colors)
 
+		# Plots data
 		for y in y_values:
 			if len(y) == 0:
 				break
 			pl.scatter(x_values, y, s=5)
 		
+		# Plots regression
 		if bool(reg):
 			self.__regression(x_values, y_values, reg)
 		
@@ -356,6 +359,7 @@ class Plotter(DataProcessing):
 			a title
 		__author__ : Juan Vanegas
 		"""
+		# Readies title, labels and data
 		title, label_x, label_y, x_values, y_values = self.__preprocess_data(default_title)
 		
 		# Set color cycle
@@ -364,11 +368,13 @@ class Plotter(DataProcessing):
 			'#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#000075']
 		pl.gca().set_prop_cycle(color = colors)
 
+		# Plots data
 		for y in y_values:
 			if len(y) == 0:
 				break
 			pl.plot(x_values, y, linewidth=1)
 		
+		# Plots regression
 		if bool(reg):
 			self.__regression(x_values, y_values, reg)
 		
@@ -387,6 +393,7 @@ class Plotter(DataProcessing):
 			a title
 		__author__ : Juan Vanegas
 		"""
+		# ~ Readies title, labels and data ~
 		if default_title:
 			title, label_x, label_y = self.get_title_labels()
 		else:
@@ -400,7 +407,8 @@ class Plotter(DataProcessing):
 			
 		# Log graphs
 		if self.log_x: x_values = self.convert_array_to_log(x_values)
-
+		
+		# Plots data
 		pl.hist(x_values, color='darkblue', linewidth=1)
 
 		# Title and labels
@@ -419,6 +427,7 @@ class Plotter(DataProcessing):
 			a title
 		__author__ : Juan Vanegas
 		"""
+		# Readies title and labels
 		if default_title:
 			title, label_x, label_y = self.get_title_labels()
 		else:
@@ -428,6 +437,7 @@ class Plotter(DataProcessing):
 		if self.data[1] != 0:
 			raise Exception('The file you are trying to plot contains more than one column')
 
+		# Generates the y values
 		sorted_data = sorted(self.data[0])
 		x_values, freq = [], []
 
@@ -438,14 +448,17 @@ class Plotter(DataProcessing):
 			else:
 				freq[-1] += 1.0
 
+		# Log graphs
 		if self.log_x: x_values = self.convert_array_to_log(x_values)
 		if self.log_y: freq = self.convert_array_to_log(freq)
-
+		
+		# Plots data
 		if scatter:
 			pl.scatter(x_values, freq, color='darkblue', s=5)
 		else:
 			pl.plot(x_values, freq, color='darkblue', linewidth=1)
 		
+		# Title and labels
 		if not no_title: pl.title(title)
 		pl.xlabel(label_x)
 		pl.ylabel(label_y)
