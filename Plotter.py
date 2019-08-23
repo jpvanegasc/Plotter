@@ -229,7 +229,10 @@ class Plotter(DataProcessing):
 	
 	# Preprocess data
 	def __preprocess_data(self, default_title):
-		"""		
+		"""
+		Readies titles, labels and datasets for plotting
+		__param__ default_title:bool determines if the auto generated titles is to be used
+		__author__ : Juan Vanegas
 		"""
 		if default_title:
 			title, label_x, label_y = self.get_title_labels()
@@ -313,6 +316,13 @@ class Plotter(DataProcessing):
 	# Graphing
 	def scatter(self, default_title:bool = True, reg:int = 0, no_title:bool = False):
 		"""
+		Generates a scatter graph and saves it
+		__param__ default_title:bool determines if the auto generated titles is to be used
+		__param__ reg:int degree of the polynomial used for adjusting ALL data. Default 0
+			means no regression is plotted
+		__param__ no_title:bool determines if the graph is to be saved without adding 
+			a title
+		__author__ : Juan Vanegas
 		"""
 		title, label_x, label_y, x_values, y_values = self.__preprocess_data(default_title)
 		
@@ -333,6 +343,13 @@ class Plotter(DataProcessing):
 
 	def lines(self, default_title:bool = True, reg:int = 0, no_title:bool = False):
 		"""
+		Generates a graph with lines and saves it
+		__param__ default_title:bool determines if the auto generated titles is to be used
+		__param__ reg:int degree of the polynomial used for adjusting ALL data. Default 0
+			means no regression is plotted
+		__param__ no_title:bool determines if the graph is to be saved without adding 
+			a title
+		__author__ : Juan Vanegas
 		"""
 		title, label_x, label_y, x_values, y_values = self.__preprocess_data(default_title)
 		
@@ -353,6 +370,11 @@ class Plotter(DataProcessing):
 
 	def histogram(self, default_title:bool = True, no_title:bool = False):
 		"""
+		Generates an histogram graph and saves it
+		__param__ default_title:bool determines if the auto generated titles is to be used
+		__param__ no_title:bool determines if the graph is to be saved without adding 
+			a title
+		__author__ : Juan Vanegas
 		"""
 		if default_title:
 			title, label_x, label_y = self.get_title_labels()
@@ -380,6 +402,11 @@ class Plotter(DataProcessing):
 	def frequency(self, scatter=True, default_title:bool = True, no_title:bool = False):
 		"""
 		if you got a better name for this method, please do change it
+		Generates a frequency graph and saves it
+		__param__ default_title:bool determines if the auto generated titles is to be used
+		__param__ no_title:bool determines if the graph is to be saved without adding 
+			a title
+		__author__ : Juan Vanegas
 		"""
 		if default_title:
 			title, label_x, label_y = self.get_title_labels()
