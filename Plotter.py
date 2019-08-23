@@ -97,11 +97,11 @@ class DataProcessing(Editor):
 	"""
 	Defines methods for extracting and proccesing data from files
 	"""
-	def __init__(self, file_path, column_num = 2, no_repeat = False):
+	def __init__(self, file_path, no_repeat = False):
 		self.file_path = file_path
 		self.file_name, self.clean_name = self.__get_filename()
 		self.path = self.__get_path()
-		self.data = self.__get_clean_data(column_num = column_num, no_repeat = no_repeat)
+		self.data = self.__get_clean_data(no_repeat = no_repeat)
 
 	# Paths
 	def __get_filename(self):
@@ -116,26 +116,18 @@ class DataProcessing(Editor):
 		return path
 
 	# Data
-	def __get_clean_data(self, column_num = 2, no_repeat:bool = False):
+	def __get_clean_data(self, no_repeat:bool = False):
 		"""
 		Reads the file containing the data to be plotted, process it, and stores it in
 			lists
-		__param__ column_num:int number of columns in the file. By default 2, which
-			manages both regular (x, y) files and single column files. 
-			Max value 10 (for now)
 		__param__ no_repeat:bool work in progress, useless for now
 		__return__ :(x, y, y1, ... , y_n)
 		"""
-		if type(column_num) != int:
-			raise ValueError('column_num must be an int')
-		if column_num > 11:
-			raise ValueError('Value not supported for column_num')
-
 		with open(self.file_path, 'r') as file:
 			data = file.read().strip()
 		data = data.split('\n')
 		
-		x, x1, x2, x3, x4, x5, x6, x7, x8, x9 = [], [], [], [], [], [], [], [], [], []
+		x = []
 		y = [[], [], [], [], [], [], [], [], [], []]
 		
 		for i in range(len(data)):
@@ -377,7 +369,6 @@ class Plotter(DataProcessing):
 		if self.log_x: x_values = self.convert_array_to_log(x_values)
 
 		pl.hist(x_values, color='darkblue', linewidth=1)
-		color_list = ['darkblue', 'darkgreen', 'darkred', ]
 
 		# Title and labels
 		if not no_title: pl.title(title)
