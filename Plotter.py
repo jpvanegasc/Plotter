@@ -116,16 +116,23 @@ class DataProcessor(Editor):
 		return path
 
 	# Data
-	def __get_clean_data(self, no_repeat:bool = False):
+	def __get_clean_data(self, no_repeat = False):
 		"""
 		Reads the file containing the data to be plotted, process it, and stores it in
 			lists
-		__param__ no_repeat:bool work in progress, useless for now
+		__param__ no_repeat:bool ereases repeated data on a file
 		__return__ :(x, y, y1, ... , y_n)
 		"""
 		with open(self.file_path, 'r') as file:
 			data = file.read().strip()
 		data = data.split('\n')
+
+		if no_repeat: 
+			temp = []
+			for d in data:
+				if d not in temp:
+					temp.append(d)
+			data = temp
 		
 		x = []
 		y = [[], [], [], [], [], [], [], [], [], []]
