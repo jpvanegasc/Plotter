@@ -93,7 +93,7 @@ class Editor:
 
 #-----------------------------------------------------------------------------------------
 
-class DataProcessing(Editor):
+class DataProcessor(Editor):
 	"""
 	Defines methods for extracting and proccesing data from files
 	"""
@@ -154,7 +154,7 @@ class DataProcessing(Editor):
 
 # ----------------------------------------------------------------------------------------
 
-class Plotter(DataProcessing):
+class Plotter(DataProcessor):
 	"""
 	Defines methods for graphing files using the pyplot lib
 	"""
