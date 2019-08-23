@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import math as m
-import pylab as pl
+import matplotlib.pyplot as pl
 import numpy as np
 
 class Editor:
