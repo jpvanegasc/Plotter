@@ -321,6 +321,7 @@ class Plotter(DataProcessor):
 			means no regression is plotted
 		__param__ no_title:bool determines if the graph is to be saved without adding 
 			a title
+		__param__ **kwargs : this gets passed to the pyplot function
 		__author__ : Juan Vanegas
 		"""
 		# Readies title, labels and data
@@ -358,6 +359,7 @@ class Plotter(DataProcessor):
 			means no regression is plotted
 		__param__ no_title:bool determines if the graph is to be saved without adding 
 			a title
+		__param__ **kwargs : this gets passed to the pyplot function
 		__author__ : Juan Vanegas
 		"""
 		# Readies title, labels and data
@@ -393,6 +395,7 @@ class Plotter(DataProcessor):
 		__param__ default_title:bool determines if the auto generated titles is to be used
 		__param__ no_title:bool determines if the graph is to be saved without adding 
 			a title
+		__param__ **kwargs : this gets passed to the pyplot function
 		__author__ : Juan Vanegas
 		"""
 		# ~ Readies title, labels and data ~
@@ -428,6 +431,7 @@ class Plotter(DataProcessor):
 		__param__ default_title:bool determines if the auto generated titles is to be used
 		__param__ no_title:bool determines if the graph is to be saved without adding 
 			a title
+		__param__ **kwargs : this gets passed to the pyplot function
 		__author__ : Juan Vanegas
 		"""
 		# Readies title and labels
