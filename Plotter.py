@@ -224,14 +224,12 @@ class Plotter(DataProcessor):
 	def log_y(self, log:bool):
 		if type(log) != bool:
 			raise ValueError('Please pass a boolean value for log_y')
-
 		self._log_y = bool(log)
 
 	@multiple_graphs.setter
 	def multiple_graphs(self, multi:bool):
 		if type(multi) != bool:
 			raise ValueError('Please pass a boolean value for multiple_graphs')
-
 		self._multiple_graphs = bool(multi)
 	
 	# Preprocess data
@@ -331,7 +329,6 @@ class Plotter(DataProcessor):
 		__param__ **kwargs : this gets passed to the pyplot function
 		__author__ : Juan Vanegas
 		"""
-		# Readies title, labels and data
 		title, label_x, label_y, x_values, y_values = self.__preprocess_data(default_title)
 		
 		# Set color cycle
@@ -340,13 +337,12 @@ class Plotter(DataProcessor):
 			'#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#000075']
 		pl.gca().set_prop_cycle('color', colors)
 
-		# Plots data
+		# Plots data and regression
 		for y in y_values:
 			if len(y) == 0:
 				break
 			pl.scatter(x_values, y, s=5, **kwargs)
 		
-		# Plots regression
 		if bool(reg):
 			self.__regression(x_values, y_values, reg)
 		
@@ -369,7 +365,6 @@ class Plotter(DataProcessor):
 		__param__ **kwargs : this gets passed to the pyplot function
 		__author__ : Juan Vanegas
 		"""
-		# Readies title, labels and data
 		title, label_x, label_y, x_values, y_values = self.__preprocess_data(default_title)
 		
 		# Set color cycle
@@ -378,13 +373,12 @@ class Plotter(DataProcessor):
 			'#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#000075']
 		pl.gca().set_prop_cycle(color = colors)
 
-		# Plots data
+		# Plots data and regression
 		for y in y_values:
 			if len(y) == 0:
 				break
 			pl.plot(x_values, y, linewidth=1, **kwargs)
 		
-		# Plots regression
 		if bool(reg):
 			self.__regression(x_values, y_values, reg)
 		
@@ -412,7 +406,7 @@ class Plotter(DataProcessor):
 			label_x, label_y = self.get_title_labels()[1], self.get_title_labels()[2] 
 			title = input('Please write the title you wish for the graph:\n')
 
-		if len(self.data[1]) != 0:
+		if len(self.data[1][0]) != 0:
 			raise Exception('The file you are trying to plot contains more than one column')
 
 		x_values = self.data[0]
@@ -448,7 +442,7 @@ class Plotter(DataProcessor):
 			label_x, label_y = self.get_title_labels()[1], self.get_title_labels()[2] 
 			title = input('Please write the title you wish for the graph:\n')
 
-		if len(self.data[1]) != 0:
+		if len(self.data[1][0]) != 0:
 			raise Exception('The file you are trying to plot contains more than one column')
 
 		# Generates the y values
