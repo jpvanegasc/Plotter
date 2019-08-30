@@ -272,6 +272,24 @@ class Plotter(DataProcessor):
 			f_fit = np.poly1d(coef)
 			pl.plot(x_values, f_fit(x_values), label=str(f_fit))
 	
+	def __save_fig(self, title, label_x, label_y, no_title):
+		"""
+		Sets title, labels and saves figure
+		__param__ title:str title of the graph
+		__param__ label_x:str label of x axis
+		__param__ label_y:str label of y axis
+		__param__ no_title:bool determines if the graph is to be saved without adding 
+			a title
+		__author__ : Juan Vanegas
+		"""
+		if not no_title: pl.title(title)
+		pl.xlabel(label_x)
+		pl.ylabel(label_y)
+		pl.legend()
+		if not self.multiple_graphs: 
+			pl.savefig(self.path + self.clean_name +'.png')
+			pl.close()
+
 	# Titles
 	def get_title_labels(self):
 		""" 
@@ -345,14 +363,8 @@ class Plotter(DataProcessor):
 		
 		if bool(reg):
 			self.__regression(x_values, y_values, reg)
-		
-		# Title and labels
-		if not no_title: pl.title(title)
-		pl.xlabel(label_x)
-		pl.ylabel(label_y)
-		pl.legend()
-		if not self.multiple_graphs: pl.savefig(self.path + self.clean_name +'.png')
-		if not self.multiple_graphs: pl.close()
+
+		self.__save_fig(title, label_x, label_y, no_title)
 
 	def lines(self, default_title = True, reg:int = 0, no_title = False,  **kwargs):
 		"""
@@ -382,13 +394,7 @@ class Plotter(DataProcessor):
 		if bool(reg):
 			self.__regression(x_values, y_values, reg)
 		
-		# Title and labels
-		if not no_title: pl.title(title)
-		pl.xlabel(label_x)
-		pl.ylabel(label_y)
-		pl.legend()
-		if not self.multiple_graphs: pl.savefig(self.path + self.clean_name +'.png')
-		if not self.multiple_graphs: pl.close()
+		self.__save_fig(title, label_x, label_y, no_title)
 
 	def histogram(self, default_title = True, no_title = False, **kwargs):
 		"""
@@ -417,13 +423,7 @@ class Plotter(DataProcessor):
 		# Plots data
 		pl.hist(x_values, linewidth=1, **kwargs)
 
-		# Title and labels
-		if not no_title: pl.title(title)
-		pl.xlabel(label_x)
-		pl.ylabel(label_y)
-		pl.legend()
-		pl.savefig(self.path + self.clean_name +'.png')
-		pl.close()
+		self.__save_fig(title, label_x, label_y, no_title)
 
 	def frequency(self, scatter=True, default_title = True, no_title = False, **kwargs):
 		"""
@@ -466,10 +466,4 @@ class Plotter(DataProcessor):
 		else:
 			pl.plot(x_values, freq, color='darkblue', linewidth=1, **kwargs)
 		
-		# Title and labels
-		if not no_title: pl.title(title)
-		pl.xlabel(label_x)
-		pl.ylabel(label_y)
-		pl.legend()
-		if not self.multiple_graphs: pl.savefig(self.path + self.clean_name +'.png')
-		if not self.multiple_graphs: pl.close()		
+		self.__save_fig(title, label_x, label_y, no_title)	
