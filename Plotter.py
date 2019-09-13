@@ -103,7 +103,6 @@ class DataProcessor(Editor):
 		self.path = self.__get_path()
 		self.data = self.__get_clean_data(no_repeat = no_repeat)
 
-	# Paths
 	def __get_filename(self):
 		file = self.file_path.split('/')[-1]
 		clean = file.split('.')[0]
@@ -115,7 +114,6 @@ class DataProcessor(Editor):
 		path = '/'.join(path) + '/'
 		return path
 
-	# Data
 	def __get_clean_data(self, no_repeat = False):
 		"""
 		Reads the file containing the data to be plotted, process it, and stores it in
@@ -176,7 +174,7 @@ class Plotter(DataProcessor):
 	@property
 	def x(self):
 		return self._x
-	
+		
 	@property
 	def y(self):
 		return self._y
@@ -232,7 +230,7 @@ class Plotter(DataProcessor):
 			raise ValueError('Please pass a boolean value for multiple_graphs')
 		self._multiple_graphs = bool(multi)
 	
-	# Preprocess data
+	# Auxiliary methods
 	def __preprocess_data(self, default_title):
 		"""
 		Readies titles, labels and datasets for plotting
@@ -255,7 +253,6 @@ class Plotter(DataProcessor):
 		
 		return title, label_x, label_y, x_values, y_values
 
-	# Regression
 	def __regression(self, x_values, y_values, degree):
 		"""
 		Plots a polynomial fit for each pair (x, y_n) on y values
@@ -290,7 +287,6 @@ class Plotter(DataProcessor):
 			pl.savefig(self.path + self.clean_name +'.png')
 			pl.close()
 
-	# Titles
 	def get_title_labels(self):
 		""" 
 		Generates title and axes names in LaTex format
