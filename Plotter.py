@@ -247,9 +247,11 @@ class Plotter(DataProcessor):
 			
 		# Log graphs
 		if self.log_x: x_values = self.convert_array_to_log(x_values)
-		if self.log_y: 
+		if self.log_y:
+			temp_y = []
 			for y in y_values:
-				y = self.convert_array_to_log(y)
+				temp_y.append(self.convert_array_to_log(y))
+			y_values = temp_y
 		
 		return title, label_x, label_y, x_values, y_values
 
