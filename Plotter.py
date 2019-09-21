@@ -3,6 +3,7 @@
 import math as m
 import matplotlib.pyplot as pl
 import numpy as np
+from scipy import stats
 
 class Editor:
 	"""
@@ -269,7 +270,10 @@ class Plotter(DataProcessor):
 			
 			coef = np.polyfit(x_values, y, degree)
 			f_fit = np.poly1d(coef)
-			pl.plot(x_values, f_fit(x_values), label=str(f_fit))
+
+			r_value = stats.linregress(x_values, y)[2]
+
+			pl.plot(x_values, f_fit(x_values), label=str(f_fit)+'\nr^2 = %.4f' % round(r_value**2, 4))
 	
 	def __save_fig(self, title, label_x, label_y, no_title):
 		"""
