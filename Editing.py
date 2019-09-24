@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 import math as m
 
+import numpy as np
+
 def convert_array_to_float(array:list):
 	"""
 	Converts elements from a list to float
@@ -39,16 +41,12 @@ def convert_array_to_log(array:list, base=10.0, base_e=False):
 	array_in_log = []
 	
 	for element in array:
-		if type(element)!= float:
-			raise Exception(
-				"The elements in the array you are trying to convert aren't floats")
+		if base_e:
+			array_in_log.append(m.log(element))
 		else:
-			if base_e:
-				array_in_log.append(m.log(element))
-			else:
-				array_in_log.append(m.log(element, base))
+			array_in_log.append(m.log(element, base))
 
-	return array_in_log
+	return np.array(array_in_log, dtype = np.double, order = 'C')
 
 def convert_array_to_radians(array:list):
 	"""
@@ -59,13 +57,9 @@ def convert_array_to_radians(array:list):
 	array_in_rad = []
 	
 	for element in array:
-		if type(element) != float:
-			raise Exception(
-				'The elements in the array you are trying to convert must be floats')
-		else:
-			array_in_rad.append(element*(m.pi/180))
+		array_in_rad.append(element*(m.pi/180))
 
-	return array_in_rad
+	return np.array(array_in_rad, dtype = np.double, order = 'C')
 
 def convert_array_to_degrees(array:list):
 	"""
@@ -76,10 +70,6 @@ def convert_array_to_degrees(array:list):
 	array_in_deg = []
 
 	for element in array:
-		if type(element) != float:
-			raise Exception(
-				'The elements in the array you are trying to convert must be floats')
-		else:
-			array_in_deg.append(element*(180/m.pi))
+		array_in_deg.append(element*(180/m.pi))
 
-	return array_in_deg
+	return np.array(array_in_deg, dtype = np.double, order = 'C')

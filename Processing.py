@@ -48,7 +48,7 @@ class DataProcessor:
 			data = temp
 		
 		x = []
-		y = [[], [], [], [], [], [], [], [], [], []]
+		y_list = [[], [], [], [], [], [], [], [], [], []]
 		
 		for i in range(len(data)):
 			line = data[i].split('\t')
@@ -67,6 +67,17 @@ class DataProcessor:
 				if i == 0:
 					x.append(value)
 				else:
-					y[i-1].append(value)
-			
-		return (x, y)
+					y_list[i-1].append(value)
+		
+		# Numpy arrays		
+		temp_y = []
+		for y in y_list:
+			if len(y) != 0:
+				temp_y.append(np.array(y, dtype = np.double, order = 'C'))
+			else:
+				break
+		
+		y_list = temp_y
+		x = np.array(x, dtype = np.double, order = 'C')
+
+		return (x, y_list)
