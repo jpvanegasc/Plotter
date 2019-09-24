@@ -1,11 +1,13 @@
-from Plotter import Plotter
+from Graphing import Plotter
 import os
 
-path = '/home/juan/Documentos/UN/7_S/Termo_Ex/04_9/datos_termopar_2.txt'
-
+#path = '/home/juan/Documentos/UN/7_S/Termo_Ex/04_9/diodo.txt'
+path = './Example_Files/quadratic.txt'
 p = Plotter(path)
 
-#p.log_y = True
-p.y = ('N', r'a.u.')
-p.x = ('R', r'\Omega')
-p.scatter(reg=1)
+#p.y = ('U_L', r'V')
+
+#p.x = ('I_L', r'mA')
+#p.y = ('U', r'V')
+
+p.scatter(reg=2)
