@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import math as m
+import re
 
 import matplotlib.pyplot as pl
 import numpy as np
@@ -45,6 +46,19 @@ class DataProcessor:
 
 		return data
 
+	def __split_line(self, line):
+		"""
+		"""
+		pattern = re.compile(r'\ +|\t')
+		edited_line = pattern.split(line)
+		temp_line = []
+
+		for elem in edited_line:
+			if elem != '':
+				temp_line.append(elem)
+
+		return temp_line
+
 	# Process file
 	def __get_clean_data(self, no_repeat = False):
 		"""
@@ -59,7 +73,7 @@ class DataProcessor:
 		y_list = [[], [], [], [], [], [], [], [], [], []]
 		
 		for i in range(len(data)):
-			line = data[i].split('\t')
+			line = self.__split_line(data[i])
 
 			if i==0:
 				try:
