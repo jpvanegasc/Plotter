@@ -28,14 +28,10 @@ class DataProcessor:
 		del(path[-1])
 		path = '/'.join(path) + '/'
 		return path
-
-	def __get_clean_data(self, no_repeat = False):
-		"""
-		Reads the file containing the data to be plotted, process it, and stores it in
-			lists
-		__param__ no_repeat:bool ereases repeated data on a file
-		__return__ :(x, y, y1, ... , y_n)
-		"""
+	
+	# Auxiliary methods
+	def __get_data_from_file(self, no_repeat):
+		""" Extracts data from a file and divides it into rows """
 		with open(self.file_path, 'r') as file:
 			data = file.read().strip()
 		data = data.split('\n')
@@ -46,6 +42,18 @@ class DataProcessor:
 				if d not in temp:
 					temp.append(d)
 			data = temp
+
+		return data
+
+	# Process file
+	def __get_clean_data(self, no_repeat = False):
+		"""
+		Reads the file containing the data to be plotted, process it, and stores it in
+			lists
+		__param__ no_repeat:bool ereases repeated data on a file
+		__return__ :(x, y, y1, ... , y_n)
+		"""
+		data = self.__get_data_from_file(no_repeat)
 		
 		x = []
 		y_list = [[], [], [], [], [], [], [], [], [], []]
