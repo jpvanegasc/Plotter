@@ -124,7 +124,7 @@ class Plotter(DataProcessor):
 
 			pl.plot(x_values, f_fit(x_values), label=str(f_fit)+'\nr^2 = %.4f' % round(r_value**2, 4))
 	
-	def __save_fig(self, title, label_x, label_y, no_title):
+	def __save_fig(self, title, label_x, label_y, no_title, default_filename):
 		"""
 		Sets title, labels and saves figure
 		__param__ title:str title of the graph
@@ -138,8 +138,14 @@ class Plotter(DataProcessor):
 		pl.xlabel(label_x)
 		pl.ylabel(label_y)
 		pl.legend()
+		
+		if default_filename:
+			filename = self.clean_name
+		else:
+			filename = input('What filename do you want for the graph? (No extension)\n')
+		
 		if not self.multiple_graphs: 
-			pl.savefig(self.path + self.clean_name +'.png')
+			pl.savefig(self.path + filename +'.png')
 			pl.close()
 
 	def get_title_labels(self):
@@ -187,7 +193,8 @@ class Plotter(DataProcessor):
 			return title, label_x, label_y
 
 	# Graphing
-	def scatter(self, default_title = True, reg:int = 0, no_title = False, **kwargs):
+	def scatter(self, default_title = True, reg:int = 0, no_title = False, 
+				default_filename = True, **kwargs):
 		"""
 		Generates a scatter graph and saves it
 		__param__ default_title:bool determines if the auto generated titles is to be used
@@ -215,9 +222,10 @@ class Plotter(DataProcessor):
 		if bool(reg):
 			self.__regression(x_values, y_values, reg)
 
-		self.__save_fig(title, label_x, label_y, no_title)
+		self.__save_fig(title, label_x, label_y, no_title, default_filename)
 
-	def lines(self, default_title = True, reg:int = 0, no_title = False,  **kwargs):
+	def lines(self, default_title = True, reg:int = 0, no_title = False,
+			default_filename = True, **kwargs):
 		"""
 		Generates a graph with lines and saves it
 		__param__ default_title:bool determines if the auto generated titles is to be used
@@ -245,9 +253,10 @@ class Plotter(DataProcessor):
 		if bool(reg):
 			self.__regression(x_values, y_values, reg)
 		
-		self.__save_fig(title, label_x, label_y, no_title)
+		self.__save_fig(title, label_x, label_y, no_title, default_filename)
 
-	def histogram(self, default_title = True, no_title = False, **kwargs):
+	def histogram(self, default_title = True, no_title = False, 
+				default_filename = True, **kwargs):
 		"""
 		Generates an histogram graph and saves it
 		__param__ default_title:bool determines if the auto generated titles is to be used
@@ -274,9 +283,10 @@ class Plotter(DataProcessor):
 		# Plots data
 		pl.hist(x_values, linewidth=1, **kwargs)
 
-		self.__save_fig(title, label_x, label_y, no_title)
+		self.__save_fig(title, label_x, label_y, no_title, default_filename)
 
-	def frequency(self, scatter=True, default_title = True, no_title = False, **kwargs):
+	def frequency(self, scatter=True, default_title = True, no_title = False, 
+				default_filename = True, **kwargs):
 		"""
 		if you got a better name for this method, please do change it
 		Generates a frequency graph and saves it
@@ -317,4 +327,4 @@ class Plotter(DataProcessor):
 		else:
 			pl.plot(x_values, freq, color='darkblue', linewidth=1, **kwargs)
 		
-		self.__save_fig(title, label_x, label_y, no_title)	
+		self.__save_fig(title, label_x, label_y, no_title, default_filename)	
