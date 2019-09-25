@@ -12,6 +12,9 @@ import Editing as E
 class DataProcessor:
 	"""
 	Defines methods for extracting and proccesing data from files
+
+	__param__ file_path:str path to file to be unpacked
+	__param__ no_repeat:bool clean file of repeated rows of data
 	"""
 	def __init__(self, file_path, no_repeat = False):
 		self.file_path = file_path
@@ -32,7 +35,7 @@ class DataProcessor:
 	
 	# Auxiliary methods
 	def __get_data_from_file(self, no_repeat):
-		""" Extracts data from a file and divides it into rows """
+		"""Extracts data from a file and divides it into rows"""
 		with open(self.file_path, 'r') as file:
 			data = file.read().strip()
 		data = data.split('\n')
@@ -47,8 +50,7 @@ class DataProcessor:
 		return data
 
 	def __split_line(self, line):
-		"""
-		"""
+		"""Splits a line separated by diferent kinds of withespace"""
 		pattern = re.compile(r'\ +|\t')
 		edited_line = pattern.split(line)
 		temp_line = []
