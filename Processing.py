@@ -14,13 +14,14 @@ class DataProcessor:
 	Defines methods for extracting and proccesing data from files
 
 	__param__ file_path:str path to file to be unpacked
+	__param__ columns:int number of columns to be saved. By default all
 	__param__ no_repeat:bool clean file of repeated rows of data
 	"""
-	def __init__(self, file_path, no_repeat = False):
+	def __init__(self, file_path, columns = None, no_repeat = False):
 		self.file_path = file_path
 		self.file_name, self.clean_name = self.__get_filename()
 		self.path = self.__get_path()
-		self.data = self.__get_clean_data(no_repeat = no_repeat)
+		self.data = self.__get_clean_data(columns = columns, no_repeat = no_repeat)
 
 	def __get_filename(self):
 		file = self.file_path.split('/')[-1]
@@ -62,7 +63,7 @@ class DataProcessor:
 		return temp_line
 
 	# Process file
-	def __get_clean_data(self, no_repeat = False):
+	def __get_clean_data(self, columns = None, no_repeat = False):
 		"""
 		Reads the file containing the data to be plotted, process it, and stores it in
 			lists
@@ -91,8 +92,11 @@ class DataProcessor:
 				if i == 0:
 					x.append(value)
 				else:
+					if bool(columns):
+						if i > columns - 1: continue
+
 					y_list[i-1].append(value)
-		
+
 		# Numpy arrays		
 		temp_y = []
 		for y in y_list:
