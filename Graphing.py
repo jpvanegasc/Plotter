@@ -91,7 +91,7 @@ class Plotter(DataProcessor):
 			title, label_x, label_y = self.get_title_labels()
 		else:
 			label_x, label_y = self.get_title_labels()[1], self.get_title_labels()[2]
-			title = input('¿Qué título desea para la gráfica?\n')
+			title = input('What title do you want for the graph?\n')
 
 		x_values, y_values = self.data
 			
