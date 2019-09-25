@@ -105,3 +105,18 @@ class DataProcessor:
 		x = np.array(x, dtype = np.double, order = 'C')
 
 		return (x, y_list)
+
+	# Other stuff
+	def transpose_data(self, save = True):
+		"""Transpose x and y1 only"""
+		file_string = ''
+
+		for i, elem in enumerate(self.data[0]):
+			line = str(self.data[1][0][i]) + '\t' + str(elem) + '\n'
+			file_string += line
+		
+		if save:
+			with open(self.path + self.clean_name + '_inverted.txt', '+w') as file:
+				file.write(file_string)
+		else:
+			print(file_string)
