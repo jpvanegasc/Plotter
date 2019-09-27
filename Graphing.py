@@ -19,6 +19,7 @@ class Plotter(DataProcessor):
 		self._y = {'variable':'', 'unit':'', 'label':r''}
 		self._log_x, self._log_y = False, False
 		self._multiple_graphs = False
+		self._no_title = False
 		self.take_dir = False
 
 	@property
@@ -40,6 +41,10 @@ class Plotter(DataProcessor):
 	@property
 	def multiple_graphs(self):
 		return self._multiple_graphs
+	
+	@property
+	def no_title(self):
+		return self.no_title
 	
 	@x.setter
 	def x(self, x_value):
@@ -81,6 +86,12 @@ class Plotter(DataProcessor):
 		if type(multi) != bool:
 			raise ValueError('Please pass a boolean value for multiple_graphs')
 		self._multiple_graphs = bool(multi)
+
+	@no_title.setter
+	def no_title(self, title:bool):
+		if type(title) != bool:
+			raise ValueError('Please pass a boolean value for no_title')
+		self._no_title = bool(title)
 	
 	# Auxiliary methods
 	def _get_title(self):
@@ -148,14 +159,12 @@ class Plotter(DataProcessor):
 
 			pl.plot(x_values, f_fit(x_values), label=str(f_fit)+'\nr^2 = %.4f' % round(r_value**2, 4))
 	
-	def __save_fig(self, default_title, default_labels, no_title, default_filename):
+	def __save_fig(self, default_title, default_labels, default_filename):
 		"""
 		Sets title, labels and saves figure
 		__param__ title:str title of the graph
 		__param__ label_x:str label of x axis
 		__param__ label_y:str label of y axis
-		__param__ no_title:bool determines if the graph is to be saved without adding 
-			a title
 		__author__ : Juan Vanegas
 		"""
 		if default_title:
@@ -169,7 +178,7 @@ class Plotter(DataProcessor):
 			label_x = input('What label do you want for the x-axis?\n')
 			label_y = input('What label do you want for the y-axis?\n')
 
-		if not no_title: pl.title(title)
+		if not self.no_title: pl.title(title)
 		pl.xlabel(label_x)
 		pl.ylabel(label_y)
 		pl.legend()
@@ -184,8 +193,8 @@ class Plotter(DataProcessor):
 			pl.close()
 
 	# Graphing
-	def scatter(self, default_title = True, default_labels = True, reg:int = 0, no_title = False,
-			default_filename = True, **kwargs):
+	def scatter(self, default_title = True, default_labels = True, reg:int = 0,
+				default_filename = True, **kwargs):
 		"""
 		Generates a scatter graph and saves it
 		__param__ default_title:bool determines if the auto generated titles is to be used
@@ -220,9 +229,9 @@ class Plotter(DataProcessor):
 		if bool(reg):
 			self.__regression(x_values, y_values, reg)
 
-		self.__save_fig(default_title, default_labels, no_title, default_filename)
+		self.__save_fig(default_title, default_labels, default_filename)
 
-	def lines(self, default_title = True, default_labels = True, reg:int = 0, no_title = False,
+	def lines(self, default_title = True, default_labels = True, reg:int = 0, 
 			default_filename = True, **kwargs):
 		"""
 		Generates a graph with lines and saves it
@@ -258,9 +267,9 @@ class Plotter(DataProcessor):
 		if bool(reg):
 			self.__regression(x_values, y_values, reg)
 		
-		self.__save_fig(default_title, default_labels, no_title, default_filename)
+		self.__save_fig(default_title, default_labels, default_filename)
 
-	def histogram(self, default_title = True, default_labels = True, no_title = False, 
+	def histogram(self, default_title = True, default_labels = True,  
 				default_filename = True, **kwargs):
 		"""
 		Generates an histogram graph and saves it
@@ -281,10 +290,10 @@ class Plotter(DataProcessor):
 		# Plots data
 		pl.hist(x_values, linewidth=1, **kwargs)
 
-		self.__save_fig(default_title, default_labels, no_title, default_filename)
+		self.__save_fig(default_title, default_labels, default_filename)
 
 	def frequency(self, scatter=True, default_title = True, default_labels = True, 
-				no_title = False, default_filename = True, **kwargs):
+				default_filename = True, **kwargs):
 		"""
 		if you got a better name for this method, please do change it
 		Generates a frequency graph and saves it
@@ -318,4 +327,4 @@ class Plotter(DataProcessor):
 		else:
 			pl.plot(x_values, freq, color='darkblue', linewidth=1, **kwargs)
 		
-		self.__save_fig(default_title, default_labels, no_title, default_filename)	
+		self.__save_fig(default_title, default_labels, default_filename)	
