@@ -21,6 +21,7 @@ class DataProcessor:
 		self.file_path = file_path
 		self.file_name, self.clean_name = self.__get_filename()
 		self.path = self.__get_path()
+		self.labels = ()
 		self.data = self.__get_clean_data(columns = columns, no_repeat = no_repeat)
 
 	def __get_filename(self):
@@ -62,6 +63,31 @@ class DataProcessor:
 
 		return temp_line
 
+	def __get_first_line(self, line):
+		"""
+		Reads a line and, if possible, extracts axis names
+		__param__ line:str
+		"""
+		pattern = re.compile(r'\w+\([\w^ ]+\)')
+		line = self.__split_line(line)
+		srch_x, srch_y = False, False
+		if len(line) >= 2:
+			srch_x = pattern.search(line[0])
+			srch_y = pattern.search(line[1])
+		x_var, x_unit, y_var, y_unit = '', '', '', ''
+
+		if srch_x:
+			x = srch_x.group().replace(')', '').split('(')
+			x_var = x[0].strip()
+			x_unit = x[1].strip()
+		
+		if srch_y:
+			y = srch_y.group().replace(')', '').split('(')
+			y_var = y[0].strip()
+			y_unit = y[1].strip()
+		
+		return (x_var, x_unit, y_var, y_unit)
+
 	# Process file
 	def __get_clean_data(self, columns = None, no_repeat = False):
 		"""
@@ -82,6 +108,7 @@ class DataProcessor:
 				try:
 					line = E.convert_array_to_float(line)
 				except:
+					self.labels = self.__get_first_line(data[i]) 
 					print(f'Careful! First line omitted on {self.file_name}')
 					continue
 
