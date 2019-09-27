@@ -44,7 +44,7 @@ class Plotter(DataProcessor):
 	
 	@property
 	def no_title(self):
-		return self.no_title
+		return self._no_title
 	
 	@x.setter
 	def x(self, x_value):
