@@ -15,8 +15,8 @@ class Plotter(DataProcessor):
 	"""
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		self._x = {'variable':'', 'unit':''}
-		self._y = {'variable':'', 'unit':''}
+		self._x = {'variable':'', 'unit':'', 'label':r''}
+		self._y = {'variable':'', 'unit':'', 'label':r''}
 		self._log_x, self._log_y = False, False
 		self._multiple_graphs = False
 		self.take_dir = False
@@ -49,7 +49,8 @@ class Plotter(DataProcessor):
 			raise ValueError(
 				"Please pass an iterable with two items: x_variable, x_unit")
 		else:
-			self._x = {'variable':x_variable, 'unit':x_unit}
+			label = self._get_label(x_variable, x_unit, log = self.log_x)
+			self._x = {'variable':x_variable, 'unit':x_unit, 'label':label}
 
 	@y.setter
 	def y(self, y_value):
@@ -59,7 +60,8 @@ class Plotter(DataProcessor):
 			raise ValueError(
 				"Please pass an iterable with two items: y_variable, y_unit")
 		else:
-			self._y = {'variable':y_variable, 'unit':y_unit}
+			label = self._get_label(y_variable, y_unit, log = self.log_y)
+			self._y = {'variable':y_variable, 'unit':y_unit, 'label':label}
 	
 	@log_x.setter
 	def log_x(self, log:bool):
@@ -81,30 +83,52 @@ class Plotter(DataProcessor):
 		self._multiple_graphs = bool(multi)
 	
 	# Auxiliary methods
-	def __preprocess_data(self, default_title):
-		"""
-		Readies titles, labels and datasets for plotting
-		__param__ default_title:bool determines if the auto generated titles is to be used
-		__author__ : Juan Vanegas
-		"""
-		if default_title:
-			title, label_x, label_y = self.get_title_labels()
-		else:
-			label_x, label_y = self.get_title_labels()[1], self.get_title_labels()[2]
-			title = input('What title do you want for the graph?\n')
+	def _get_title(self):
+		"""Generates title in LaTex format"""
+		title = r""
 
-		x_values, y_values = self.data
+		if not self.log_x and not self.log_y:
 			
-		# Log graphs
-		if self.log_x: x_values = E.convert_array_to_log(x_values)
-		if self.log_y:
-			temp_y = []
-			for y in y_values:
-				temp_y.append(E.convert_array_to_log(y))
-			y_values = temp_y
-		
-		return title, label_x, label_y, x_values, y_values
+			title = r'${0}\left({1}\right)\;contra\;{2}\left({3}\right)$'.format(
+				self.y['variable'], self.y['unit'], self.x['variable'], self.x['unit'])
 
+			return title
+
+		elif self.log_x and not self.log_y:
+			
+			title = r'${0}\left({1}\right)\;contra\;log\left({2}\right)$'.format(
+				self.y['variable'], self.y['unit'], self.x['variable'])
+
+			return title
+
+		elif self.log_y and not self.log_x:
+			
+			title = r'$log\left({0}\right)\;contra\;{1}\left({2}\right)$'.format(
+				self.y['variable'], self.x['variable'], self.x['unit'])
+
+			return title
+
+		elif self.log_x and self.log_y:
+			
+			title = r'$log\left({0}\right)\;contra\;log\left({1}\right)$'.format(
+				self.y['variable'], self.x['variable'])
+
+			return title
+
+	def _get_label(self, variable, unit, log = False):
+		"""Generates axes names in LaTex format"""
+		label = r''
+
+		if not log:
+			label = r'${0}\left({1}\right)$'.format(variable, unit)
+
+			return label
+		
+		else:
+			label = r'$log\left({0}\right)$'.format(self.x['variable'])
+
+			return label
+	
 	def __regression(self, x_values, y_values, degree):
 		"""
 		Plots a polynomial fit for each pair (x, y_n) on y values
@@ -124,7 +148,7 @@ class Plotter(DataProcessor):
 
 			pl.plot(x_values, f_fit(x_values), label=str(f_fit)+'\nr^2 = %.4f' % round(r_value**2, 4))
 	
-	def __save_fig(self, title, label_x, label_y, no_title, default_filename):
+	def __save_fig(self, default_title, default_labels, no_title, default_filename):
 		"""
 		Sets title, labels and saves figure
 		__param__ title:str title of the graph
@@ -134,6 +158,17 @@ class Plotter(DataProcessor):
 			a title
 		__author__ : Juan Vanegas
 		"""
+		if default_title:
+			title = self._get_title()
+		else:
+			title = input('What title do you want for the graph?\n')
+
+		if default_labels:
+			label_x, label_y = self.x['label'], self.y['label']
+		else:
+			label_x = input('What label do you want for the x-axis?\n')
+			label_y = input('What label do you want for the y-axis?\n')
+
 		if not no_title: pl.title(title)
 		pl.xlabel(label_x)
 		pl.ylabel(label_y)
@@ -148,53 +183,9 @@ class Plotter(DataProcessor):
 			pl.savefig(self.path + filename +'.png')
 			pl.close()
 
-	def get_title_labels(self):
-		""" 
-		Generates title and axes names in LaTex format
-		__return__ : title, label_x, label_y
-		__author__ : Juan Vanegas
-		"""
-		title, label_x, label_y, = r'', r'', r''
-
-		if not self.log_x and not self.log_y:
-			
-			title = r'${0}\left({1}\right)\;contra\;{2}\left({3}\right)$'.format(
-				self.y['variable'], self.y['unit'], self.x['variable'], self.x['unit'])
-			label_x = r'${0}\left({1}\right)$'.format(self.x['variable'], self.x['unit'])
-			label_y = r'${0}\left({1}\right)$'.format(self.y['variable'], self.y['unit'])
-
-			return title, label_x, label_y
-
-		elif self.log_x and not self.log_y:
-			
-			title = r'${0}\left({1}\right)\;contra\;log\left({2}\right)$'.format(
-				self.y['variable'], self.y['unit'], self.x['variable'])
-			label_x = r'$log\left({0}\right)$'.format(self.x['variable'])
-			label_y = r'${0}\left({1}\right)$'.format(self.y['variable'], self.y['unit'])
-
-			return title, label_x, label_y
-
-		elif self.log_y and not self.log_x:
-			
-			title = r'$log\left({0}\right)\;contra\;{1}\left({2}\right)$'.format(
-				self.y['variable'], self.x['variable'], self.x['unit'])
-			label_x = r'${0}\left({1}\right)$'.format(self.x['variable'], self.x['unit'])
-			label_y = r'$log\left({0}\right)$'.format(self.y['variable'])
-
-			return title, label_x, label_y
-
-		elif self.log_x and self.log_y:
-			
-			title = r'$log\left({0}\right)\;contra\;log\left({1}\right)$'.format(
-				self.y['variable'], self.x['variable'])
-			label_x = r'$log\left({0}\right)$'.format(self.x['variable'])
-			label_y = r'$log\left({0}\right)$'.format(self.y['variable'])
-
-			return title, label_x, label_y
-
 	# Graphing
-	def scatter(self, default_title = True, reg:int = 0, no_title = False, 
-				default_filename = True, **kwargs):
+	def scatter(self, default_title = True, default_labels = True, reg:int = 0, no_title = False,
+			default_filename = True, **kwargs):
 		"""
 		Generates a scatter graph and saves it
 		__param__ default_title:bool determines if the auto generated titles is to be used
@@ -205,7 +196,14 @@ class Plotter(DataProcessor):
 		__param__ **kwargs : this gets passed to the pyplot function
 		__author__ : Juan Vanegas
 		"""
-		title, label_x, label_y, x_values, y_values = self.__preprocess_data(default_title)
+		x_values, y_values = self.data
+
+		if self.log_x: x_values = E.convert_array_to_log(x_values)
+		if self.log_y:
+			temp_y = []
+			for y in y_values:
+				temp_y.append(E.convert_array_to_log(y))
+			y_values = temp_y
 		
 		# Set color cycle
 		colors = ['#000000', '#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
@@ -222,9 +220,9 @@ class Plotter(DataProcessor):
 		if bool(reg):
 			self.__regression(x_values, y_values, reg)
 
-		self.__save_fig(title, label_x, label_y, no_title, default_filename)
+		self.__save_fig(default_title, default_labels, no_title, default_filename)
 
-	def lines(self, default_title = True, reg:int = 0, no_title = False,
+	def lines(self, default_title = True, default_labels = True, reg:int = 0, no_title = False,
 			default_filename = True, **kwargs):
 		"""
 		Generates a graph with lines and saves it
@@ -236,7 +234,14 @@ class Plotter(DataProcessor):
 		__param__ **kwargs : this gets passed to the pyplot function
 		__author__ : Juan Vanegas
 		"""
-		title, label_x, label_y, x_values, y_values = self.__preprocess_data(default_title)
+		x_values, y_values = self.data
+
+		if self.log_x: x_values = E.convert_array_to_log(x_values)
+		if self.log_y:
+			temp_y = []
+			for y in y_values:
+				temp_y.append(E.convert_array_to_log(y))
+			y_values = temp_y
 		
 		# Set color cycle
 		colors = ['#000000', '#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
@@ -253,9 +258,9 @@ class Plotter(DataProcessor):
 		if bool(reg):
 			self.__regression(x_values, y_values, reg)
 		
-		self.__save_fig(title, label_x, label_y, no_title, default_filename)
+		self.__save_fig(default_title, default_labels, no_title, default_filename)
 
-	def histogram(self, default_title = True, no_title = False, 
+	def histogram(self, default_title = True, default_labels = True, no_title = False, 
 				default_filename = True, **kwargs):
 		"""
 		Generates an histogram graph and saves it
@@ -265,16 +270,9 @@ class Plotter(DataProcessor):
 		__param__ **kwargs : this gets passed to the pyplot function
 		__author__ : Juan Vanegas
 		"""
-		# ~ Readies title, labels and data ~
-		if default_title:
-			title, label_x, label_y = self.get_title_labels()
-		else:
-			label_x, label_y = self.get_title_labels()[1], self.get_title_labels()[2] 
-			title = input('Please write the title you wish for the graph:\n')
-
 		if len(self.data[1][0]) != 0:
-			raise Exception('The file you are trying to plot contains more than one column')
-
+			print('Careful! The file you are plotting contains more than one column\n')
+		
 		x_values = self.data[0]
 			
 		# Log graphs
@@ -283,10 +281,10 @@ class Plotter(DataProcessor):
 		# Plots data
 		pl.hist(x_values, linewidth=1, **kwargs)
 
-		self.__save_fig(title, label_x, label_y, no_title, default_filename)
+		self.__save_fig(default_title, default_labels, no_title, default_filename)
 
-	def frequency(self, scatter=True, default_title = True, no_title = False, 
-				default_filename = True, **kwargs):
+	def frequency(self, scatter=True, default_title = True, default_labels = True, 
+				no_title = False, default_filename = True, **kwargs):
 		"""
 		if you got a better name for this method, please do change it
 		Generates a frequency graph and saves it
@@ -296,15 +294,8 @@ class Plotter(DataProcessor):
 		__param__ **kwargs : this gets passed to the pyplot function
 		__author__ : Juan Vanegas
 		"""
-		# Readies title and labels
-		if default_title:
-			title, label_x, label_y = self.get_title_labels()
-		else:
-			label_x, label_y = self.get_title_labels()[1], self.get_title_labels()[2] 
-			title = input('Please write the title you wish for the graph:\n')
-
 		if len(self.data[1][0]) != 0:
-			raise Exception('The file you are trying to plot contains more than one column')
+			print('Careful! The file you are plotting contains more than one column\n')
 
 		# Generates the y values
 		sorted_data = sorted(self.data[0])
@@ -327,4 +318,4 @@ class Plotter(DataProcessor):
 		else:
 			pl.plot(x_values, freq, color='darkblue', linewidth=1, **kwargs)
 		
-		self.__save_fig(title, label_x, label_y, no_title, default_filename)	
+		self.__save_fig(default_title, default_labels, no_title, default_filename)	
