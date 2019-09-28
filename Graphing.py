@@ -15,9 +15,10 @@ class Plotter(DataProcessor):
 	"""
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		self._x = {'variable':'', 'unit':'', 'label':r''}
-		self._y = {'variable':'', 'unit':'', 'label':r''}
+		self._x, self._y = None, None
 		self._log_x, self._log_y = False, False
+		self.x = (self.labels[0], self.labels[1])
+		self.y = (self.labels[2], self.labels[3])
 		self._multiple_graphs = False
 		self._no_title = False
 		self.take_dir = False
