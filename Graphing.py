@@ -21,7 +21,9 @@ class Plotter(DataProcessor):
 		self.y = (self.labels[2], self.labels[3])
 		self._multiple_graphs = False
 		self._no_title = False
-		self.take_dir = False
+		self.default_title = True
+		self.default_labels = True
+		self.default_filename = True
 
 	@property
 	def x(self):
@@ -93,7 +95,7 @@ class Plotter(DataProcessor):
 		if type(title) != bool:
 			raise ValueError('Please pass a boolean value for no_title')
 		self._no_title = bool(title)
-	
+
 	# Auxiliary methods
 	def _get_title(self, x_var, x_unit, y_var, y_unit):
 		"""Generates title in LaTex format"""
@@ -159,21 +161,15 @@ class Plotter(DataProcessor):
 
 			pl.plot(x_values, f_fit(x_values), label=str(f_fit)+'\nr^2 = %.4f' % round(r_value**2, 4))
 	
-	def __save_fig(self, default_title, default_labels, default_filename):
-		"""
-		Sets title, labels and saves figure
-		__param__ title:str title of the graph
-		__param__ label_x:str label of x axis
-		__param__ label_y:str label of y axis
-		__author__ : Juan Vanegas
-		"""
-		if default_title:
+	def __save_fig(self):
+		"""Sets title, labels and saves figure"""
+		if self.default_title:
 			title = self._get_title(self.x['variable'], self.x['unit'], self.y['variable'], 
 			self.y['unit'])
 		else:
 			title = input('What title do you want for the graph?\n')
 
-		if default_labels:
+		if self.default_labels:
 			label_x, label_y = self.x['label'], self.y['label']
 		else:
 			label_x = input('What label do you want for the x-axis?\n')
@@ -184,7 +180,7 @@ class Plotter(DataProcessor):
 		pl.ylabel(label_y)
 		pl.legend()
 		
-		if default_filename:
+		if self.default_filename:
 			filename = self.clean_name
 		else:
 			filename = input('What filename do you want for the graph? (No extension)\n')
@@ -194,15 +190,11 @@ class Plotter(DataProcessor):
 			pl.close()
 
 	# Graphing
-	def scatter(self, default_title = True, default_labels = True, reg:int = 0,
-				default_filename = True, **kwargs):
+	def scatter(self, reg:int = 0, **kwargs):
 		"""
 		Generates a scatter graph and saves it
-		__param__ default_title:bool determines if the auto generated titles is to be used
 		__param__ reg:int degree of the polynomial used for adjusting ALL data. Default 0
 			means no regression is plotted
-		__param__ no_title:bool determines if the graph is to be saved without adding 
-			a title
 		__param__ **kwargs : this gets passed to the pyplot function
 		__author__ : Juan Vanegas
 		"""
@@ -230,17 +222,13 @@ class Plotter(DataProcessor):
 		if bool(reg):
 			self.__regression(x_values, y_values, reg)
 
-		self.__save_fig(default_title, default_labels, default_filename)
+		self.__save_fig()
 
-	def lines(self, default_title = True, default_labels = True, reg:int = 0, 
-			default_filename = True, **kwargs):
+	def lines(self, reg:int = 0, **kwargs):
 		"""
 		Generates a graph with lines and saves it
-		__param__ default_title:bool determines if the auto generated titles is to be used
 		__param__ reg:int degree of the polynomial used for adjusting ALL data. Default 0
 			means no regression is plotted
-		__param__ no_title:bool determines if the graph is to be saved without adding 
-			a title
 		__param__ **kwargs : this gets passed to the pyplot function
 		__author__ : Juan Vanegas
 		"""
@@ -268,15 +256,11 @@ class Plotter(DataProcessor):
 		if bool(reg):
 			self.__regression(x_values, y_values, reg)
 		
-		self.__save_fig(default_title, default_labels, default_filename)
+		self.__save_fig()
 
-	def histogram(self, default_title = True, default_labels = True,  
-				default_filename = True, **kwargs):
+	def histogram(self, **kwargs):
 		"""
 		Generates an histogram graph and saves it
-		__param__ default_title:bool determines if the auto generated titles is to be used
-		__param__ no_title:bool determines if the graph is to be saved without adding 
-			a title
 		__param__ **kwargs : this gets passed to the pyplot function
 		__author__ : Juan Vanegas
 		"""
@@ -291,16 +275,12 @@ class Plotter(DataProcessor):
 		# Plots data
 		pl.hist(x_values, linewidth=1, **kwargs)
 
-		self.__save_fig(default_title, default_labels, default_filename)
+		self.__save_fig()
 
-	def frequency(self, scatter=True, default_title = True, default_labels = True, 
-				default_filename = True, **kwargs):
+	def frequency(self, scatter=True, **kwargs):
 		"""
 		if you got a better name for this method, please do change it
 		Generates a frequency graph and saves it
-		__param__ default_title:bool determines if the auto generated titles is to be used
-		__param__ no_title:bool determines if the graph is to be saved without adding 
-			a title
 		__param__ **kwargs : this gets passed to the pyplot function
 		__author__ : Juan Vanegas
 		"""
@@ -328,4 +308,4 @@ class Plotter(DataProcessor):
 		else:
 			pl.plot(x_values, freq, color='darkblue', linewidth=1, **kwargs)
 		
-		self.__save_fig(default_title, default_labels, default_filename)	
+		self.__save_fig()	
