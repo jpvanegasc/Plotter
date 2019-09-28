@@ -147,7 +147,7 @@ class DataProcessor:
 			file_string += line
 		
 		if save:
-			with open(self.path + self.clean_name + '_inverted.txt', '+w') as file:
+			with open(self.path + self.clean_name + '_transposed.txt', '+w') as file:
 				file.write(file_string)
 		else:
 			print(file_string)

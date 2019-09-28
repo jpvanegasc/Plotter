@@ -261,6 +261,7 @@ class Plotter(DataProcessor):
 		"""
 		if you got a better name for this method, please do change it
 		Generates a frequency graph and saves it
+		__param__ scatter:bool plots the graph as a scatter plot
 		__param__ **kwargs : this gets passed to the pyplot function
 		__author__ : Juan Vanegas
 		"""
