@@ -19,8 +19,8 @@ class Plotter(DataProcessor):
 		self._log_x, self._log_y = False, False
 		self.x = (self.labels[0], self.labels[1])
 		self.y = (self.labels[2], self.labels[3])
-		self._multiple_graphs = False
-		self._no_title = False
+		self.multiple_graphs = False
+		self.no_title = False
 		self.default_title = True
 		self.default_labels = True
 		self.default_filename = True
@@ -41,14 +41,6 @@ class Plotter(DataProcessor):
 	def log_y(self):
 		return self._log_y
 
-	@property
-	def multiple_graphs(self):
-		return self._multiple_graphs
-	
-	@property
-	def no_title(self):
-		return self._no_title
-	
 	@x.setter
 	def x(self, x_value):
 		try:
@@ -83,18 +75,6 @@ class Plotter(DataProcessor):
 		if type(log) != bool:
 			raise ValueError('Please pass a boolean value for log_y')
 		self._log_y = bool(log)
-
-	@multiple_graphs.setter
-	def multiple_graphs(self, multi:bool):
-		if type(multi) != bool:
-			raise ValueError('Please pass a boolean value for multiple_graphs')
-		self._multiple_graphs = bool(multi)
-
-	@no_title.setter
-	def no_title(self, title:bool):
-		if type(title) != bool:
-			raise ValueError('Please pass a boolean value for no_title')
-		self._no_title = bool(title)
 
 	# Auxiliary methods
 	def _get_title(self, x_var, x_unit, y_var, y_unit):
