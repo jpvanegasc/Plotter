@@ -68,7 +68,7 @@ class DataProcessor:
 		Reads a line and, if possible, extracts axis names
 		__param__ line:str
 		"""
-		pattern = re.compile(r'[\w\\]+\([\w^\\ ]+\)')
+		pattern = re.compile(r'[\w\\\{\}]+\([\w^\\ \{\}]+\)')
 		line = self.__split_line(line)
 		srch_x, srch_y = False, False
 		if len(line) >= 2:
