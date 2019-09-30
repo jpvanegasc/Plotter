@@ -149,6 +149,11 @@ class Plotter(DataProcessor):
 		else:
 			title = input('What title do you want for the graph?\n')
 
+		if self.log_x:
+			self.x['label'] = self._get_label(self.x['variable'], self.x['unit'], log = True)
+		if self.log_y:
+			self.y['label'] = self._get_label(self.y['variable'], self.y['unit'], log = True)
+
 		if self.default_labels:
 			label_x, label_y = self.x['label'], self.y['label']
 		else:
