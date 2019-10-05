@@ -5,6 +5,7 @@ import math as m
 import matplotlib.pyplot as pl
 import numpy as np
 from scipy import stats
+import scipy.optimize as opt
 
 import Editing as E
 from Processing import DataProcessor
@@ -141,6 +142,21 @@ class Plotter(DataProcessor):
 
 			pl.plot(x_values, f_fit(x_values), label=str(f_fit)+'\nr^2 = %.4f' % round(r_value**2, 4))
 	
+	def __function_fit(self, x_values, y_values, function):
+		"""
+		Plots a curve fit -for a given curve-, for each pair 
+		"""
+		for y in y_values:
+			if len(y) == 0:
+				break
+			
+			optimizedParameters, pcov = opt.curve_fit(function, x_values, y)
+			
+			r_value = stats.linregress(x_values, y)[2]
+
+			pl.plot(x_values, function(x_values, *optimizedParameters), 
+				label=str(function)+'\nr^2 = %.4f' % round(r_value**2, 4))
+
 	def __save_fig(self):
 		"""Sets title, labels and saves figure"""
 		if self.default_title:
@@ -175,7 +191,7 @@ class Plotter(DataProcessor):
 			pl.close()
 
 	# Graphing
-	def scatter(self, reg:int = 0, **kwargs):
+	def scatter(self, reg:int = 0, fit = None, **kwargs):
 		"""
 		Generates a scatter graph and saves it
 		__param__ reg:int degree of the polynomial used for adjusting ALL data. Default 0
@@ -206,10 +222,13 @@ class Plotter(DataProcessor):
 		
 		if bool(reg):
 			self.__regression(x_values, y_values, reg)
+		
+		if bool(fit):
+			self.__function_fit(x_values, y_values, fit)
 
 		self.__save_fig()
 
-	def lines(self, reg:int = 0, **kwargs):
+	def lines(self, reg:int = 0, fit = None, **kwargs):
 		"""
 		Generates a graph with lines and saves it
 		__param__ reg:int degree of the polynomial used for adjusting ALL data. Default 0
@@ -240,6 +259,9 @@ class Plotter(DataProcessor):
 		
 		if bool(reg):
 			self.__regression(x_values, y_values, reg)
+
+		if bool(fit):
+			self.__function_fit(x_values, y_values, fit)
 		
 		self.__save_fig()
 
