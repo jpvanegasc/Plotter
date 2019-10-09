@@ -155,7 +155,7 @@ class Plotter(DataProcessor):
 			r_value = stats.linregress(x_values, y)[2]
 
 			pl.plot(x_values, function(x_values, *optimizedParameters), 
-				label=str(function)+'\nr^2 = %.4f' % round(r_value**2, 4))
+				label=str(function)+'\nr² = %.4f' % round(r_value**2, 4))
 
 	def __save_fig(self):
 		"""Sets title, labels and saves figure"""
