@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import math as m
+import re
 
 import matplotlib.pyplot as pl
 import numpy as np
@@ -78,43 +79,16 @@ class Plotter(DataProcessor):
 		self._log_y = bool(log)
 
 	# Auxiliary methods
-	def _get_title(self, x_var, x_unit, y_var, y_unit):
-		"""Generates title in LaTex format"""
-		title = r""
-
-		if not self.log_x and not self.log_y:
-			
-			title = r'${0}\left({1}\right)\;contra\;{2}\left({3}\right)$'.format(
-				y_var, y_unit, x_var, x_unit)
-
-			return title
-
-		elif self.log_x and not self.log_y:
-			
-			title = r'${0}\left({1}\right)\;contra\;log\left({2}\right)$'.format(
-				y_var, y_unit, x_var)
-
-			return title
-
-		elif self.log_y and not self.log_x:
-			
-			title = r'$log\left({0}\right)\;contra\;{1}\left({2}\right)$'.format(
-				y_var, x_var, x_unit)
-
-			return title
-
-		elif self.log_x and self.log_y:
-			
-			title = r'$log\left({0}\right)\;contra\;log\left({1}\right)$'.format(y_var, x_var)
-
-			return title
-
 	def _get_label(self, variable, unit, log = False):
 		"""Generates axes names in LaTex format"""
+		flag = re.search(r'd\w*_less', unit)
 		label = r''
 
 		if not log:
-			label = r'${0}\left({1}\right)$'.format(variable, unit)
+			if not flag:
+				label = r'$%s\left(\mathrm{%s}\right)$' % (variable, unit)
+			else:
+				label = r'${0}$'.format(variable)
 
 			return label
 		
@@ -160,8 +134,7 @@ class Plotter(DataProcessor):
 	def __save_fig(self):
 		"""Sets title, labels and saves figure"""
 		if self.default_title:
-			title = self._get_title(self.x['variable'], self.x['unit'], self.y['variable'], 
-			self.y['unit'])
+			title = r'{0} contra {1}'.format(self.x['label'], self.y['label'])
 		else:
 			title = input('What title do you want for the graph?\n')
 

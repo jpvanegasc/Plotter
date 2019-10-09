@@ -171,7 +171,7 @@ class DataProcessor:
 		for i in range(len(self.data[0])):
 			x = self.data[0][i]
 			y_line = []
-			y_lambda = lambda y : y_line.append(' & ' + str(y))
+			y_lambda = lambda y : y_line.append(' & %f' % y)
 			for elem in self.data[1]: y_lambda(elem[i])
 			y_str = ''.join(y_line)
 			latex_command += '\t %f %s \\\\ \\hline \n'% (x, y_str)
