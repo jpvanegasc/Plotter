@@ -51,9 +51,12 @@ class DataProcessor:
 
 		return data
 
-	def __split_line(self, line):
+	def __split_line(self, line, index = 1):
 		"""Splits a line separated by diferent kinds of withespace"""
-		pattern = re.compile(r'\ +|\t')
+		if index == 0:
+			pattern = re.compile(r'\ {2,}|\t')
+		else:
+			pattern = re.compile(r'\ +|\t')
 		edited_line = pattern.split(line)
 		temp_line = []
 
@@ -69,7 +72,7 @@ class DataProcessor:
 		__param__ line:str
 		"""
 		pattern = re.compile(r'[\w\\\{\}]+\([\w^\\ \{\}]+\)')
-		line = self.__split_line(line)
+		line = self.__split_line(line, index = 0)
 		srch_x, srch_y = False, False
 		if len(line) >= 2:
 			srch_x = pattern.search(line[0])
