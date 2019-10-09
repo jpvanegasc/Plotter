@@ -86,7 +86,7 @@ class Plotter(DataProcessor):
 
 		if not log:
 			if not flag:
-				label = r'${0}\left({1}\right)$'.format(variable, unit)
+				label = r'$%s\left(\mathrm{%s}\right)$' % (variable, unit)
 			else:
 				label = r'${0}$'.format(variable)
 
@@ -134,7 +134,7 @@ class Plotter(DataProcessor):
 	def __save_fig(self):
 		"""Sets title, labels and saves figure"""
 		if self.default_title:
-			title = r'{0}\;contra\;{1}'.format(self.x['label'], self.y['label'])
+			title = r'{0} contra {1}'.format(self.x['label'], self.y['label'])
 		else:
 			title = input('What title do you want for the graph?\n')
 
