@@ -154,3 +154,27 @@ class DataProcessor:
 				file.write(file_string)
 		else:
 			print(file_string)
+
+	def latex_table(self):
+		"""Prints the data in LaTex format"""
+		l_num = ''
+		for i in range(len(self.data[1])+1):
+			l_num += '|l'
+		
+		latex_command = '\\begin{table}\n\t\\centering\n\t\\begin{tabular}{%s|}\n\t\\hline\n' % l_num
+		
+		if len(self.labels) != 0:
+			latex_command += f'\t${self.labels[0]}$({self.labels[1]}) & ${self.labels[2]}$({self.labels[3]}) \\\\ \\hline\n'
+		else:
+			latex_command += '\t x_var(x_unit) & y_var(y_unit) \\\\ \hline\n'
+		
+		for i in range(len(self.data[0])):
+			x = self.data[0][i]
+			y_line = []
+			y_lambda = lambda y : y_line.append(' & ' + str(y))
+			for elem in self.data[1]: y_lambda(elem[i])
+			y_str = ''.join(y_line)
+			latex_command += '\t %f %s \\\\ \\hline \n'% (x, y_str)
+
+		latex_command += '\t\\end{tabular}\n\t\\caption{table}\n\t\\label{tab: my_table}\n\\end{table}'
+		print(latex_command)
