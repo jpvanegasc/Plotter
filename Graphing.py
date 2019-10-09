@@ -140,7 +140,7 @@ class Plotter(DataProcessor):
 
 			r_value = stats.linregress(x_values, y)[2]
 
-			pl.plot(x_values, f_fit(x_values), label=str(f_fit)+'\nr^2 = %.4f' % round(r_value**2, 4))
+			pl.plot(x_values, f_fit(x_values), label=str(f_fit)+'\n$r^2 = %.4f$' % round(r_value**2, 4))
 	
 	def __function_fit(self, x_values, y_values, function):
 		"""
