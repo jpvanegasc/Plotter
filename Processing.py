@@ -21,7 +21,7 @@ class DataProcessor:
 		self.file_path = file_path
 		self.file_name, self.clean_name = self.__get_filename()
 		self.path = self.__get_path()
-		self.labels = ()
+		self.labels = ('', '', '', '')
 		self.data = self.__get_clean_data(columns = columns, no_repeat = no_repeat)
 
 	def __get_filename(self):
@@ -163,10 +163,10 @@ class DataProcessor:
 		
 		latex_command = '\\begin{table}\n\t\\centering\n\t\\begin{tabular}{%s|}\n\t\\hline\n' % l_num
 		
-		if len(self.labels) != 0:
+		if self.labels[0] != '':
 			latex_command += f'\t${self.labels[0]}$({self.labels[1]}) & ${self.labels[2]}$({self.labels[3]}) \\\\ \\hline\n'
 		else:
-			latex_command += '\t x_var(x_unit) & y_var(y_unit) \\\\ \hline\n'
+			latex_command += '\t x_var(x_unit) & y_var(y_unit) \\\\ \\hline\n'
 		
 		for i in range(len(self.data[0])):
 			x = self.data[0][i]
