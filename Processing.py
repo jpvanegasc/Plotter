@@ -143,8 +143,11 @@ class DataProcessor:
 	# Other stuff
 	def transpose_data(self, save = True):
 		"""Transpose x and y1 only"""
-		file_string = ''
-
+		if self.labels[0] == '':
+			file_string = ''
+		else: 
+			file_string = f'{self.labels[2]}({self.labels[3]})\t{self.labels[0]}({self.labels[1]})\n'
+		
 		for i, elem in enumerate(self.data[0]):
 			line = str(self.data[1][0][i]) + '\t' + str(elem) + '\n'
 			file_string += line
