@@ -114,7 +114,7 @@ class Plotter(DataProcessor):
 
 			r_value = stats.linregress(x_values, y)[2]
 
-			pl.plot(x_values, f_fit(x_values), label=str(f_fit)+'\n$r^2 = %.4f$' % round(r_value**2, 4))
+			pl.plot(x_values, f_fit(x_values), label=str(f_fit)+'\n$r² = %.4f$' % round(r_value**2, 4))
 	
 	def __function_fit(self, x_values, y_values, function):
 		"""
@@ -134,7 +134,18 @@ class Plotter(DataProcessor):
 	def __save_fig(self):
 		"""Sets title, labels and saves figure"""
 		if self.default_title:
-			title = r'{0} contra {1}'.format(self.x['label'], self.y['label'])
+			if not self.log_x and not self.log_y:
+				title = r'{0} contra {1}'.format(self.y['label'], self.x['label'])
+			elif self.log_x and not self.log_y:
+				label = self.x['label'].replace('$', '').split('\\')
+				title = r'{0} contra $\log\left({1}\right)$'.format(self.y['label'], label[0])
+			elif not self.log_x and self.log_y:
+				label = self.y['label'].replace('$', '').split('\\')
+				title = r'$\log\left({0}\right)$ contra {1}'.format(label[0], self.x['label'])
+			else:
+				label_x = self.x['label'].replace('$', '').split('\\')
+				label_y = self.y['label'].replace('$', '').split('\\')
+				title = r'$\log\left({0}\right)$ contra $\log\left({1}\right)$'.format(label_y[0], label_x[0])
 		else:
 			title = input('What title do you want for the graph?\n')
 
