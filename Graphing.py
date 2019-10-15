@@ -69,14 +69,15 @@ class Plotter(DataProcessor):
 	def log_x(self, log:bool):
 		if type(log) != bool:
 			raise ValueError('Please pass a boolean value for log_x')
-		
 		self._log_x = bool(log)
+		self.x = (self.x['variable'], self.x['unit'])
 	
 	@log_y.setter
 	def log_y(self, log:bool):
 		if type(log) != bool:
 			raise ValueError('Please pass a boolean value for log_y')
 		self._log_y = bool(log)
+		self.y = (self.y['variable'], self.y['unit'])
 
 	# Auxiliary methods
 	def _get_label(self, variable, unit, log = False):
@@ -134,18 +135,7 @@ class Plotter(DataProcessor):
 	def __save_fig(self):
 		"""Sets title, labels and saves figure"""
 		if self.default_title:
-			if not self.log_x and not self.log_y:
-				title = r'{0} contra {1}'.format(self.y['label'], self.x['label'])
-			elif self.log_x and not self.log_y:
-				label = self.x['label'].replace('$', '').split('\\')
-				title = r'{0} contra $\log\left({1}\right)$'.format(self.y['label'], label[0])
-			elif not self.log_x and self.log_y:
-				label = self.y['label'].replace('$', '').split('\\')
-				title = r'$\log\left({0}\right)$ contra {1}'.format(label[0], self.x['label'])
-			else:
-				label_x = self.x['label'].replace('$', '').split('\\')
-				label_y = self.y['label'].replace('$', '').split('\\')
-				title = r'$\log\left({0}\right)$ contra $\log\left({1}\right)$'.format(label_y[0], label_x[0])
+			title = r'{0} contra {1}'.format(self.y['label'], self.x['label'])
 		else:
 			title = input('What title do you want for the graph?\n')
 
