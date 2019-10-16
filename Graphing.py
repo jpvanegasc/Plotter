@@ -125,7 +125,7 @@ class Plotter(DataProcessor):
 			if len(y) == 0:
 				break
 			
-			optimizedParameters, pcov = opt.curve_fit(function, x_values, y)
+			optimizedParameters = opt.curve_fit(function, x_values, y)[0]
 			
 			r_value = stats.linregress(x_values, y)[2]
 
