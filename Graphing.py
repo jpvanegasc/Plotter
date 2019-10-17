@@ -102,7 +102,7 @@ class Plotter(DataProcessor):
 
 			return label
 	
-	def __regression(self, x_values, y_values, degree):
+	def __regression(self, x_values, y_values, degree, low = 0, up=None):
 		"""
 		Plots a polynomial fit for each pair (x, y_n) on y values
 		__param__ x_values:list fixed x values for each individual y value group
@@ -114,6 +114,9 @@ class Plotter(DataProcessor):
 			if len(y) == 0:
 				break
 			
+			x_values = x_values[low:up]
+			y = y[low:up]
+
 			coef = np.polyfit(x_values, y, degree)
 			f_fit = np.poly1d(coef)
 
