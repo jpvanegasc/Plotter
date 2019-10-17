@@ -26,6 +26,10 @@ class Plotter(DataProcessor):
 		self.default_title = True
 		self.default_labels = True
 		self.default_filename = True
+		self.colors = ['#000000', '#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
+			'#911eb4', '#42d4f4', '#f032e6', '#bfef45', '#fabebe', '#469990', '#e6beff',
+			'#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#000075']
+		self.counter = 0
 
 	@property
 	def x(self):
@@ -115,7 +119,8 @@ class Plotter(DataProcessor):
 
 			r_value = stats.linregress(x_values, y)[2]
 
-			pl.plot(x_values, f_fit(x_values), label=str(f_fit)+'\n$r² = %.4f$' % round(r_value**2, 4))
+			pl.plot(x_values, f_fit(x_values), c=self.colors[self.counter], 
+				label=str(f_fit)+'\n$r² = %.4f$' % round(r_value**2, 4))
 	
 	def __function_fit(self, x_values, y_values, function):
 		"""
@@ -129,7 +134,7 @@ class Plotter(DataProcessor):
 			
 			r_value = stats.linregress(x_values, y)[2]
 
-			pl.plot(x_values, function(x_values, *optimizedParameters), 
+			pl.plot(x_values, function(x_values, *optimizedParameters), c=self.colors[self.counter], 
 				label=str(function)+'\nr² = %.4f' % round(r_value**2, 4))
 
 	def __save_fig(self):
@@ -183,16 +188,13 @@ class Plotter(DataProcessor):
 			y_values = temp_y
 		
 		# Set color cycle
-		colors = ['#000000', '#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
-			'#911eb4', '#42d4f4', '#f032e6', '#bfef45', '#fabebe', '#469990', '#e6beff',
-			'#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#000075']
-		pl.gca().set_prop_cycle('color', colors)
+		pl.gca().set_prop_cycle('color', self.colors)
 
 		# Plots data and regression
 		for y in y_values:
 			if len(y) == 0:
 				break
-			pl.scatter(x_values, y, s=5, **kwargs)
+			pl.scatter(x_values, y, c=self.colors[self.counter], s=5, **kwargs)
 		
 		if bool(reg):
 			self.__regression(x_values, y_values, reg)
@@ -220,16 +222,13 @@ class Plotter(DataProcessor):
 			y_values = temp_y
 		
 		# Set color cycle
-		colors = ['#000000', '#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
-			'#911eb4', '#42d4f4', '#f032e6', '#bfef45', '#fabebe', '#469990', '#e6beff',
-			'#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#000075']
-		pl.gca().set_prop_cycle(color = colors)
+		pl.gca().set_prop_cycle('color', self.colors)
 
-		# Plots data and regression
+		# Plots data and regressions
 		for y in y_values:
 			if len(y) == 0:
 				break
-			pl.plot(x_values, y, linewidth=1, **kwargs)
+			pl.plot(x_values, y, c=self.colors[self.counter], linewidth=1, **kwargs)
 		
 		if bool(reg):
 			self.__regression(x_values, y_values, reg)
