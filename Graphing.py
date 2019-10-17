@@ -26,6 +26,7 @@ class Plotter(DataProcessor):
 		self.default_title = True
 		self.default_labels = True
 		self.default_filename = True
+		self.grid = False
 		self.colors = ['#000000', '#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
 			'#911eb4', '#42d4f4', '#f032e6', '#bfef45', '#fabebe', '#469990', '#e6beff',
 			'#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#000075']
@@ -162,7 +163,8 @@ class Plotter(DataProcessor):
 		pl.xlabel(label_x)
 		pl.ylabel(label_y)
 		pl.legend()
-		
+		if self.grid: pl.grid(b=True, which='both')
+
 		if self.default_filename:
 			filename = self.clean_name
 		else:
