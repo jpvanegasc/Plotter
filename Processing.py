@@ -105,6 +105,10 @@ class DataProcessor:
 		y_list = [[], [], [], [], [], [], [], [], [], []]
 		
 		for i in range(len(data)):
+			ignore = re.match(r'#|//', data[i])
+			if ignore:
+				continue
+			
 			line = self.__split_line(data[i])
 
 			if i==0:
