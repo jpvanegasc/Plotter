@@ -1,6 +1,6 @@
 # Plotter-3000
 
-Plotter-3000 is a python library that implements numpy, scipy and matplotlib to generate an 
+Plotter-3000 is a Python library that implements numpy, scipy and matplotlib to support an 
 automated data processor and plotter designed specially for use in pure and applied sciences.
 
 ## Usage
@@ -17,9 +17,9 @@ p.frequency() # plots and saves a relative frequency polygon
 ```
 
 ## Roadmap
-* Support for all file extension
+* Support for all file extensions
 * Automated error management
 
 ## Acknowledgments 
-* Hats off to the developers of numpy, scipy and matplotlib, libraries on which this proyect 
-is based
+* Hats off to the developers of numpy, scipy and matplotlib, libraries which made this 
+proyect posible
