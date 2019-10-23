@@ -18,7 +18,7 @@ p.frequency() # plots and saves a relative frequency polygon
 
 ## Roadmap
 * Support for all file extensions
-* Automated error management
+* Automated experimental error processing and management
 
 ## Acknowledgments 
 * Hats off to the developers of numpy, scipy and matplotlib, libraries which made this 
