@@ -103,12 +103,25 @@ class DataProcessor:
 		
 		x = []
 		y_list = [[], [], [], [], [], [], [], [], [], []]
+		ignore_bool = False
 		
 		for i in range(len(data)):
-			ignore = re.match(r'#|//', data[i])
-			if ignore:
+			# Ignore single line or a whole block of data
+			ignore_line = re.match(r'#|//', data[i])
+			if ignore_line:
 				continue
 			
+			if ignore_bool:
+				ignore_end = re.match(r'"""|\*/', data[i])
+				if ignore_end: ignore_bool = False
+				continue
+			
+			ignore_start = re.match(r'"""|/\*', data[i])
+			if ignore_start: 
+				ignore_bool = True
+				continue
+			
+			# Proccess data
 			line = self.__split_line(data[i])
 
 			if i==0:
@@ -122,14 +135,14 @@ class DataProcessor:
 			else:
 				line = E.convert_array_to_float(line)
 			
-			for i, value in enumerate(line):
-				if i == 0:
+			for ii, value in enumerate(line):
+				if ii == 0:
 					x.append(value)
 				else:
 					if bool(columns):
-						if i > columns - 1: continue
+						if ii > columns - 1: continue
 
-					y_list[i-1].append(value)
+					y_list[ii-1].append(value)
 
 		# Numpy arrays		
 		temp_y = []
