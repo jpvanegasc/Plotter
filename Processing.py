@@ -14,15 +14,19 @@ class DataProcessor:
 	Defines methods for extracting and proccesing data from files
 
 	__param__ file_path:str path to file to be unpacked
+	__param__ func_x: function that preprocess x data
+	__param__ func_y: function that preprocess each y data
 	__param__ columns:int number of columns to be saved. By default all
 	__param__ no_repeat:bool clean file of repeated rows of data
 	"""
-	def __init__(self, file_path, columns = None, no_repeat = False):
+	def __init__(self, file_path, f_x = None, f_y = None, columns = None, no_repeat = False):
 		self.file_path = file_path
 		self.file_name, self.clean_name = self.__get_filename()
 		self.path = self.__get_path()
 		self.labels = ('', '', '', '')
+		self.f_x, self.f_y = f_x, f_y
 		self.data = self.__get_clean_data(columns = columns, no_repeat = no_repeat)
+
 
 	def __get_filename(self):
 		file = self.file_path.split('/')[-1]
@@ -137,12 +141,19 @@ class DataProcessor:
 			
 			for ii, value in enumerate(line):
 				if ii == 0:
-					x.append(value)
+					if not self.f_x:
+						x.append(value)
+					else:
+						x.append(self.f_x(value))
 				else:
 					if bool(columns):
 						if ii > columns - 1: continue
-
-					y_list[ii-1].append(value)
+					
+					if not self.f_y:
+						y_list[ii-1].append(value)
+					else:
+						y_list[ii-1].append(self.f_y(value))
+					
 
 		# Numpy arrays		
 		temp_y = []
