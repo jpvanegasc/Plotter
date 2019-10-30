@@ -93,6 +93,11 @@ class DataProcessor:
 			y_var = y[0].strip()
 			y_unit = y[1].strip()
 		
+		if self.f_x:
+			x_var, x_unit = '', ''
+		if self.f_y:
+			y_var, y_unit = '', ''
+		
 		return (x_var, x_unit, y_var, y_unit)
 
 	# Process file

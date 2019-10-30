@@ -27,9 +27,9 @@ class Plotter(DataProcessor):
 		self.default_labels = True
 		self.default_filename = True
 		self.grid = False
-		self.colors = ['#000000', '#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
-			'#911eb4', '#42d4f4', '#f032e6', '#bfef45', '#fabebe', '#469990', '#e6beff',
-			'#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#000075']
+		self.colors = ['#000000', '#e6194B', '#3cb44b', '#4363d8', '#f58231', '#911eb4', 
+						'#42d4f4', '#f032e6', '#fabebe', '#469990', '#e6beff', '#9A6324', 
+						'#fffac8', '#800000', '#aaffc3', '#808000', '#000075', "#ffe119", "#bfef45"]
 		self.counter = 0
 
 	@property
@@ -103,7 +103,7 @@ class Plotter(DataProcessor):
 
 			return label
 	
-	def __regression(self, x_values, y_values, degree, low = 0, up=None):
+	def __regression(self, x_values, y_values, degree, low = 0, up=None, reg_label=None):
 		"""
 		Plots a polynomial fit for each pair (x, y_n) on y values
 		__param__ x_values:list fixed x values for each individual y value group
@@ -122,9 +122,12 @@ class Plotter(DataProcessor):
 			f_fit = np.poly1d(coef)
 
 			r_value = stats.linregress(x_values, y)[2]
-
+			
+			if reg_label: label= '\n'+ reg_label
+			else: label = ''
+			
 			pl.plot(x_values, f_fit(x_values), c=self.colors[self.counter], 
-				label=str(f_fit)+'\n$r² = %.4f$' % round(r_value**2, 4))
+				label=str(f_fit)+'\n$r² = %.4f$' % round(r_value**2, 4)+label)
 	
 	def __function_fit(self, x_values, y_values, function):
 		"""
