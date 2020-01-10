@@ -15,22 +15,26 @@ class Plotter(DataProcessor):
     """
     Defines methods for graphing files using the pyplot lib
     """
+    colors = ['#000000', '#e6194B', '#3cb44b', '#4363d8', '#f58231', '#911eb4', 
+            '#42d4f4', '#f032e6', '#fabebe', '#469990', '#e6beff', '#9A6324', 
+            '#fffac8', '#800000', '#aaffc3', '#808000', '#000075', "#ffe119", "#bfef45"]
+    multiple_graphs = False
+    no_title = False
+    default_title = True
+    default_labels = True
+    default_filename = True
+    grid = False
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        
         self._x, self._y = None, None
         self._log_x, self._log_y = False, False
+        self._color = None
+
         self.x = (self.labels[0], self.labels[1])
         self.y = (self.labels[2], self.labels[3])
-        self.multiple_graphs = False
-        self.no_title = False
-        self.default_title = True
-        self.default_labels = True
-        self.default_filename = True
-        self.grid = False
-        self.colors = ['#000000', '#e6194B', '#3cb44b', '#4363d8', '#f58231', '#911eb4', 
-                        '#42d4f4', '#f032e6', '#fabebe', '#469990', '#e6beff', '#9A6324', 
-                        '#fffac8', '#800000', '#aaffc3', '#808000', '#000075', "#ffe119", "#bfef45"]
-        self.counter = 0
+        self.color = 0
 
     @property
     def x(self):
@@ -47,6 +51,10 @@ class Plotter(DataProcessor):
     @property
     def log_y(self):
         return self._log_y
+
+    @property
+    def color(self):
+        return self.color
 
     @x.setter
     def x(self, x_value):
@@ -71,18 +79,21 @@ class Plotter(DataProcessor):
             self._y = {'variable':y_variable, 'unit':y_unit, 'label':label}
     
     @log_x.setter
-    def log_x(self, log:bool):
-        if type(log) != bool:
-            raise ValueError('Please pass a boolean value for log_x')
+    def log_x(self, log):
         self._log_x = bool(log)
         self.x = (self.x['variable'], self.x['unit'])
     
     @log_y.setter
-    def log_y(self, log:bool):
-        if type(log) != bool:
-            raise ValueError('Please pass a boolean value for log_y')
+    def log_y(self, log):
         self._log_y = bool(log)
         self.y = (self.y['variable'], self.y['unit'])
+
+    @color.setter
+    def color(self, num:int):
+        if type(num) != int:
+            raise ValueError("Color must be an int")
+        self._color = self.colors[num]
+        
 
     # Auxiliary methods
     def _get_label(self, variable, unit, log = False):
@@ -126,7 +137,7 @@ class Plotter(DataProcessor):
             if reg_label: label= '\n'+ reg_label
             else: label = ''
             
-            pl.plot(x_values, f_fit(x_values), c=self.colors[self.counter], 
+            pl.plot(x_values, f_fit(x_values), c=self.color, 
                 label=str(f_fit)+'\n$r² = %.4f$' % round(r_value**2, 4)+label)
     
     def __function_fit(self, x_values, y_values, function):
@@ -141,7 +152,7 @@ class Plotter(DataProcessor):
             
             r_value = stats.linregress(x_values, y)[2]
 
-            pl.plot(x_values, function(x_values, *optimizedParameters), c=self.colors[self.counter], 
+            pl.plot(x_values, function(x_values, *optimizedParameters), c=self.color, 
                 label=str(function)+'\nr² = %.4f' % round(r_value**2, 4))
 
     def __save_fig(self):
@@ -202,7 +213,7 @@ class Plotter(DataProcessor):
         for y in y_values:
             if len(y) == 0:
                 break
-            pl.scatter(x_values, y, c=self.colors[self.counter], s=5, **kwargs)
+            pl.scatter(x_values, y, c=self.color, s=5, **kwargs)
         
         if bool(reg):
             self.__regression(x_values, y_values, reg, reg_label=reg_l)
@@ -236,7 +247,7 @@ class Plotter(DataProcessor):
         for y in y_values:
             if len(y) == 0:
                 break
-            pl.plot(x_values, y, c=self.colors[self.counter], linewidth=1, **kwargs)
+            pl.plot(x_values, y, c=self.color, linewidth=1, **kwargs)
         
         if bool(reg):
             self.__regression(x_values, y_values, reg, reg_label=reg_l)
