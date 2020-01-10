@@ -54,7 +54,7 @@ class Plotter(DataProcessor):
 
     @property
     def color(self):
-        return self.color
+        return self._color
 
     @x.setter
     def x(self, x_value):
