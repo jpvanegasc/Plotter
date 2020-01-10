@@ -92,9 +92,9 @@ class DataProcessor:
             y_var = y[0].strip()
             y_unit = y[1].strip()
         
-        if self.f_x:
+        if bool(self.f_x):
             x_var, x_unit = '', ''
-        if self.f_y:
+        if bool(self.f_y):
             y_var, y_unit = '', ''
         
         return (x_var, x_unit, y_var, y_unit)
@@ -137,7 +137,7 @@ class DataProcessor:
                     line = E.convert_array_to_float(line)
                 except:
                     self.labels = self.__get_first_line(data[i]) 
-                    print(f'Wrning: First line omitted on {self.file_name}')
+                    print(f'Warning: First line omitted on {self.file_name}')
                     continue
 
             else:
@@ -159,7 +159,7 @@ class DataProcessor:
                         y_list[ii-1].append(self.f_y(value))
                     
 
-        # Numpy arrays        
+        # Numpy arrays
         temp_y = []
         for y in y_list:
             if len(y) != 0:
