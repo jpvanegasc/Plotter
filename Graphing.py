@@ -264,7 +264,7 @@ class Plotter(DataProcessor):
         __author__ : Juan Vanegas
         """
         if len(self.data[1][0]) != 0:
-            print('Careful! The file you are plotting contains more than one column\n')
+            print('Warning: The file you are plotting contains more than one column\n')
         
         x_values = self.data[0]
             
@@ -285,7 +285,7 @@ class Plotter(DataProcessor):
         __author__ : Juan Vanegas
         """
         if len(self.data[1][0]) != 0:
-            print('Careful! The file you are plotting contains more than one column\n')
+            print('Warning: The file you are plotting contains more than one column\n')
 
         # Generates the y values
         sorted_data = sorted(self.data[0])
