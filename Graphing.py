@@ -19,7 +19,7 @@ class Plotter(DataProcessor):
             '#42d4f4', '#f032e6', '#fabebe', '#469990', '#e6beff', '#9A6324', 
             '#fffac8', '#800000', '#aaffc3', '#808000', '#000075', "#ffe119", "#bfef45"]
     multiple_graphs = False
-    no_title = False
+    no_title = True
     default_title = True
     default_labels = True
     default_filename = True
