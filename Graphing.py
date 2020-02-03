@@ -96,7 +96,7 @@ class Plotter(DataProcessor):
         
 
     # Auxiliary methods
-    def _get_label(self, variable, unit, log = False):
+    def _get_label(self, variable, unit, log=False):
         """Generates axes names in LaTex format"""
         flag = re.search(r'd\w*_less', unit)
         label = r''
@@ -189,7 +189,7 @@ class Plotter(DataProcessor):
             pl.close()
 
     # Graphing
-    def scatter(self, reg:int = 0, fit = None, reg_l = None, **kwargs):
+    def scatter(self, reg:int=0, fit=None, reg_l=None, ms=5, **kwargs):
         """
         Generates a scatter graph and saves it
         __param__ reg:int degree of the polynomial used for adjusting ALL data. Default 0
@@ -213,7 +213,7 @@ class Plotter(DataProcessor):
         for y in y_values:
             if len(y) == 0:
                 break
-            pl.scatter(x_values, y, c=self.color, s=5, **kwargs)
+            pl.scatter(x_values, y, c=self.color, s=ms, **kwargs)
         
         if bool(reg):
             self.__regression(x_values, y_values, reg, reg_label=reg_l)
@@ -223,7 +223,7 @@ class Plotter(DataProcessor):
 
         self.__save_fig()
 
-    def lines(self, reg:int = 0, fit = None, reg_l = None, **kwargs):
+    def lines(self, reg:int=0, fit=None, reg_l=None, lw=1, **kwargs):
         """
         Generates a graph with lines and saves it
         __param__ reg:int degree of the polynomial used for adjusting ALL data. Default 0
@@ -247,7 +247,7 @@ class Plotter(DataProcessor):
         for y in y_values:
             if len(y) == 0:
                 break
-            pl.plot(x_values, y, c=self.color, linewidth=1, **kwargs)
+            pl.plot(x_values, y, c=self.color, linewidth=lw, **kwargs)
         
         if bool(reg):
             self.__regression(x_values, y_values, reg, reg_label=reg_l)
@@ -257,7 +257,7 @@ class Plotter(DataProcessor):
         
         self.__save_fig()
 
-    def histogram(self, **kwargs):
+    def histogram(self, lw=1, **kwargs):
         """
         Generates an histogram graph and saves it
         __param__ **kwargs : this gets passed to the pyplot function
@@ -272,11 +272,11 @@ class Plotter(DataProcessor):
         if self.log_x: x_values = E.convert_array_to_log(x_values)
         
         # Plots data
-        pl.hist(x_values, linewidth=1, **kwargs)
+        pl.hist(x_values, linewidth=lw, **kwargs)
 
         self.__save_fig()
 
-    def frequency(self, scatter=True, reg:int = 0, fit = None, reg_l = None, **kwargs):
+    def frequency(self, scatter=True, reg:int=0, fit=None, reg_l=None, ms=5, lw=1, **kwargs):
         """
         if you got a better name for this method, please do change it
         Generates a frequency graph and saves it
@@ -304,9 +304,9 @@ class Plotter(DataProcessor):
         
         # Plots data
         if scatter:
-            pl.scatter(x_values, freq, color='darkblue', s=5, **kwargs)
+            pl.scatter(x_values, freq, color='darkblue', s=ms, **kwargs)
         else:
-            pl.plot(x_values, freq, color='darkblue', linewidth=1, **kwargs)
+            pl.plot(x_values, freq, color='darkblue', linewidth=lw, **kwargs)
 
         if bool(reg):
             self.__regression(x_values, freq, reg, reg_label=reg_l)
