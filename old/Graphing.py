@@ -149,7 +149,7 @@ class Plotter(DataProcessor):
                 break
             
             optimizedParameters = opt.curve_fit(function, x_values, y)[0]
-            
+            print(optimizedParameters)
             r_value = stats.linregress(x_values, y)[2]
 
             pl.plot(x_values, function(x_values, *optimizedParameters), c=self.color, 
