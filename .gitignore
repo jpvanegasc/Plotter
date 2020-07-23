@@ -1,5 +1,4 @@
 *.png
 *__pycache__/
-*ploteador_xd.py
 *.json
 /plot-env/*
