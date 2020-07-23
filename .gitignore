@@ -1,4 +1,11 @@
+# Virtual enviroment
+/plot-env/*
+
+# Test data files & graphs
+*.txt
+*.csv
 *.png
+
+# Other
 *__pycache__/
 *.json
-/plot-env/*
