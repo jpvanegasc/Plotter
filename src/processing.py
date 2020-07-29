@@ -2,6 +2,7 @@
 """
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import numpy as np
 import pandas as pd
 
 
@@ -53,3 +54,25 @@ class DataProcessor:
             return pd.read_table(self.filepath)
         if self.extension in ("xls", "xlsx", "xlsm", "xlsb", "odf"):
             return pd.read_excel(self.filepath)
+
+    def column_to_log(self, index, base=10, base_e=False):
+        """
+        """
+        key = self.columns[index]
+
+        if base_e == True:
+            log_key = f"ln_{key}"
+            self.df[log_key] = np.log(self.df[key])
+            self.columns.append(log_key)
+        elif base == 10:
+            log_key = f"log10_{key}"
+            self.df[log_key] = np.log10(self.df[key])
+            self.columns.append(log_key)
+        elif base == 2:
+            log_key = f"log2_{key}"
+            self.df[log_key] = np.log2(self.df[key])
+            self.columns.append(log_key)
+        else:
+            log_key = f"log{base}_{key}"
+            self.df[log_key] = np.log(self.df[key])/np.log(base)
+            self.columns.append(log_key)
