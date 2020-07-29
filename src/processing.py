@@ -19,19 +19,7 @@ class DataProcessor:
     columns = []
 
     def __init__(self, path):
-        filepath = path.split('/')
-        self.filepath = path
-        self.filename = filepath[-1].split('.')[0]
-        self.extension = filepath[-1].split('.')[-1]
-
-        if self.extension not in self.VALID_EXTENSIONS:
-            raise ValueError(f"filetype '.{self.extension}' not supported")
-
-        if len(path) > 1:
-            self.base_dir = '/'.join(filepath[:-1]) + '/'
-        else:
-            self.base_dir = "./"
-
+        self.__process_filepath(path)
         self.df = self.__get_dataframe(self.filepath)
         self.columns.extend(self.df.columns)
 
@@ -42,6 +30,21 @@ class DataProcessor:
             return self.df[key]
         else:
             raise TypeError("key must be int or str")
+
+    def __process_filepath(self, path_to_file):
+        self.filepath = path_to_file
+
+        filepath = path_to_file.split('/')
+        self.filename = filepath[-1].split('.')[0]
+        self.extension = filepath[-1].split('.')[-1]
+
+        if self.extension not in self.VALID_EXTENSIONS:
+            raise ValueError(f"filetype '.{self.extension}' not supported")
+
+        if len(filepath) > 1:
+            self.base_dir = '/'.join(filepath[:-1]) + '/'
+        else:
+            self.base_dir = "./"
 
     def __get_dataframe(self, path):
         if self.extension == "csv":
