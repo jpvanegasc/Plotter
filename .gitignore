@@ -1,10 +1,11 @@
 # Virtual enviroment
 /plot-env/*
 
-# Test data files & graphs
+# Test data files & graphs, local implementations
 *.txt
 *.csv
 *.png
+test.ipynb
 
 # Other
 *__pycache__/
