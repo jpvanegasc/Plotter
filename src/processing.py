@@ -15,7 +15,7 @@ class DataProcessor:
     extension = ''
     base_dir = ''
 
-    dataframe = None
+    df = None
     columns = []
 
     def __init__(self, path):
@@ -32,14 +32,14 @@ class DataProcessor:
         else:
             self.base_dir = "./"
 
-        self.dataframe = self.__get_dataframe(self.filepath)
-        self.columns.extend(self.dataframe.columns)
+        self.df = self.__get_dataframe(self.filepath)
+        self.columns.extend(self.df.columns)
 
     def __getitem__(self, key):
         if type(key) == int:
-            return self.dataframe[self.columns[key]]
+            return self.df[self.columns[key]]
         elif type(key) == str:
-            return self.dataframe[key]
+            return self.df[key]
         else:
             raise TypeError("key must be int or str")
 
