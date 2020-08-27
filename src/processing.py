@@ -2,6 +2,8 @@
 """
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import re
+
 import numpy as np
 import pandas as pd
 
@@ -18,11 +20,12 @@ class DataProcessor:
 
     df = None
     columns = []
+    vars_units = {}
 
     def __init__(self, path):
         self.__process_filepath(path)
         self.df = self.__get_dataframe(self.filepath)
-        self.columns.extend(self.df.columns)
+        self.__get_columns(self.df.columns)
 
     def __getitem__(self, key):
         if type(key) == int:
@@ -54,6 +57,29 @@ class DataProcessor:
             return pd.read_table(self.filepath)
         if self.extension in ("xls", "xlsx", "xlsm", "xlsb", "odf"):
             return pd.read_excel(self.filepath)
+
+    def __get_columns(self, cols):
+        """
+        """
+        pattern = re.compile(r'[\w\\\{\}]+\([\w^\\ \{\}]+\)')
+
+        var, unit = [], []
+
+        for c in cols:
+            srch = pattern.search(c)
+
+            if srch:
+                raw = srch.group().replace(')', '').split('(')
+                v = raw[0].strip()
+                u = raw[1].strip()
+                var.append(v); unit.append(u)
+                self.vars_units[v] = u
+            else:
+                var.append(c)
+                self.vars_units[c] = ''
+
+        self.df.columns = var
+        self.columns = var
 
     def column_to_log(self, index, base=10, base_e=False):
         """
