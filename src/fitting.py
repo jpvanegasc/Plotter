@@ -8,8 +8,9 @@ from scipy.stats import linregress
 class PolynomialFit:
     """
     """
-    r, r2 = 0., 0.
     polynomial = None
+    r, r2 = 0., 0.
+    y_fit = None
 
     def __init__(self, x_list, y_list, deg, low=0, up=None, var="x"):
         self.x = x_list[low:up]
@@ -19,6 +20,7 @@ class PolynomialFit:
 
         self.coef = polyfit(self.x, self.y, self.degree)
         self.polynomial = poly1d(self.coef)
+        self.y_fit = self.polynomial(self.x)
 
         self.r = linregress(self.x, self.y)[2]
         self.r2 = self.r**2
